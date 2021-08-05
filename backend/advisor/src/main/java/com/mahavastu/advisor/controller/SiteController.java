@@ -1,0 +1,35 @@
+package com.mahavastu.advisor.controller;
+
+import com.mahavastu.advisor.model.Site;
+import com.mahavastu.advisor.service.SiteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("site")
+public class SiteController {
+
+    @Autowired
+    private SiteService siteService;
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Site addSite(@RequestBody Site site) {
+        return siteService.addSite(site);
+    }
+
+    @GetMapping("/{siteId}")
+    @ResponseBody
+    public Site getSiteBySiteId(@PathVariable("siteId") Integer siteId) {
+        return siteService.getSiteBySiteId(siteId);
+    }
+
+    @GetMapping("/client/{clientId}")
+    @ResponseBody
+    public List<Site> getSitesByClientId(@PathVariable("clientId") Integer clientId) {
+        return siteService.getSitesByClientId(clientId);
+    }
+
+}
