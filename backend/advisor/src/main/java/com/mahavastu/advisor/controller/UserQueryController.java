@@ -3,6 +3,7 @@ package com.mahavastu.advisor.controller;
 import com.mahavastu.advisor.model.Client;
 import com.mahavastu.advisor.model.MasterConcern;
 import com.mahavastu.advisor.model.UserQuery;
+import com.mahavastu.advisor.service.MasterConcernService;
 import com.mahavastu.advisor.service.UserQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -13,6 +14,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("user-query")
 public class UserQueryController {
 
@@ -25,7 +27,7 @@ public class UserQueryController {
         return userQueryService.addUserQuery(userQuery);
     }
 
-    @GetMapping("/{userQueryId}")
+    @GetMapping("/user-query-id/{userQueryId}")
     @ResponseBody
     public UserQuery getUserQueryByQueryId(@PathVariable("userQueryId") int userQueryId) {
         return userQueryService.getQueryById(userQueryId);

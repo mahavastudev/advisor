@@ -138,4 +138,18 @@ public final class Converter {
                 client.getPassword());
 
     }
+
+    public static List<MasterConcern> getMasterConcernFromMasterConcernEntities(List<MasterConcernEntity> masterConcernEntities) {
+        List<MasterConcern> masterConcerns = new ArrayList<>();
+        if(CollectionUtils.isEmpty(masterConcernEntities)) {
+            return masterConcerns;
+        }
+        masterConcernEntities.stream().forEach(masterConcernEntity -> {
+            MasterConcern masterConcern = getMasterConcernFromMasterConcernEntity(masterConcernEntity);
+            if(masterConcern != null) {
+                masterConcerns.add(masterConcern);
+            }
+        });
+        return masterConcerns;
+    }
 }
