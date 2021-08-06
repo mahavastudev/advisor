@@ -43,6 +43,22 @@ public class SiteServiceImpl implements SiteService{
     }
 
     @Override
+    public Site updateSite(Site site) {
+
+        ClientEntity clientEntity = clientRepository.getById(site.getClient().getClientId());
+        SiteTypeEntity siteTypeEntity = siteTypeRepository.getById(site.getSiteType().getSiteTypeId());
+        SiteEntity siteEntity = Converter.getSiteEntityFromSite(site, clientEntity, siteTypeEntity);
+
+        if(siteEntity != null) {
+            System.out.println(siteEntity);
+            SiteEntity savedEntity = siteRepository.save(siteEntity);
+            System.out.println("savedEntity: " + savedEntity);
+            return Converter.getSiteFromSiteEntity(savedEntity);
+        }
+        return null;
+    }
+
+    @Override
     public Site getSiteBySiteId(Integer siteId) {
         SiteEntity siteEntity = siteRepository.getById(siteId);
         return Converter.getSiteFromSiteEntity(siteEntity);

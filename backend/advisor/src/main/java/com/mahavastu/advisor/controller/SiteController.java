@@ -22,6 +22,11 @@ public class SiteController {
         return siteService.addSite(site);
     }
 
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Site updateSite(@RequestBody Site site) {
+        return siteService.updateSite(site);
+    }
+
     @GetMapping("/{siteId}")
     @ResponseBody
     public Site getSiteBySiteId(@PathVariable("siteId") Integer siteId) {

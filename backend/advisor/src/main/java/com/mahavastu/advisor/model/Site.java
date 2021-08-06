@@ -11,7 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Site {
-
     private Integer siteId;
     private String siteName;
     private String siteAddress;

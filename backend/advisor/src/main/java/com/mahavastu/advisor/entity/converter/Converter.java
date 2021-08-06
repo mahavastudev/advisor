@@ -26,7 +26,7 @@ public final class Converter {
                 site.getConditionType());
     }
 
-    public static SiteEntity getSiteEntityFromSite(Site site, ClientEntity clientEntity) {
+    public static SiteEntity getSiteEntityFromSite(Site site, ClientEntity clientEntity, SiteTypeEntity siteTypeEntity) {
         if (site == null || clientEntity == null) {
             return null;
         }
@@ -34,13 +34,13 @@ public final class Converter {
                 site.getSiteName(),
                 site.getSiteAddress(),
                 site.getSiteGeo(),
-                getSiteTypeEntityFromSiteType(site.getSiteType()),
+                siteTypeEntity,
                 site.getSiteMapId(),
                 clientEntity,
                 site.getConditionType());
     }
 
-    private static SiteTypeEntity getSiteTypeEntityFromSiteType(SiteType siteType) {
+    public static SiteTypeEntity getSiteTypeEntityFromSiteType(SiteType siteType) {
         return new SiteTypeEntity(siteType.getSiteTypeId(), siteType.getSiteTypeName());
     }
 
