@@ -2,10 +2,13 @@ package com.mahavastu.advisor.service;
 
 import com.mahavastu.advisor.entity.ClientEntity;
 import com.mahavastu.advisor.entity.SiteEntity;
+import com.mahavastu.advisor.entity.SiteTypeEntity;
 import com.mahavastu.advisor.entity.converter.Converter;
 import com.mahavastu.advisor.model.Site;
+import com.mahavastu.advisor.model.SiteType;
 import com.mahavastu.advisor.repository.ClientRepository;
 import com.mahavastu.advisor.repository.SiteRepository;
+import com.mahavastu.advisor.repository.SiteTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +23,15 @@ public class SiteServiceImpl implements SiteService{
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private SiteTypeRepository siteTypeRepository;
+
     @Override
     public Site addSite(Site site) {
-        System.out.println(site.getClient());
+
         ClientEntity clientEntity = clientRepository.getById(site.getClient().getClientId());
-        System.out.println(clientEntity);
-        SiteEntity siteEntity = Converter.buildSiteEntityFromSite(site, clientEntity);
+        SiteTypeEntity siteTypeEntity = siteTypeRepository.getById(site.getSiteType().getSiteTypeId());
+        SiteEntity siteEntity = Converter.buildSiteEntityFromSite(site, clientEntity, siteTypeEntity);
 
         if(siteEntity != null) {
             System.out.println(siteEntity);
@@ -47,5 +53,10 @@ public class SiteServiceImpl implements SiteService{
         ClientEntity clientEntity = clientRepository.getById(clientId);
         List<SiteEntity> siteEntities = siteRepository.findByClient(clientEntity);
         return Converter.getSitesFromSiteEntities(siteEntities);
+    }
+
+    @Override
+    public List<SiteType> getAllSiteTypes() {
+        return Converter.getSiteTypesFromSiteTypeEntities(siteTypeRepository.findAll());
     }
 }

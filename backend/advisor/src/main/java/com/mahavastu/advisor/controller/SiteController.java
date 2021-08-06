@@ -1,6 +1,7 @@
 package com.mahavastu.advisor.controller;
 
 import com.mahavastu.advisor.model.Site;
+import com.mahavastu.advisor.model.SiteType;
 import com.mahavastu.advisor.service.SiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -31,6 +32,12 @@ public class SiteController {
     @ResponseBody
     public List<Site> getSitesByClientId(@PathVariable("clientId") Integer clientId) {
         return siteService.getSitesByClientId(clientId);
+    }
+
+    @GetMapping("/site-types")
+    @ResponseBody
+    public List<SiteType> getSiteTypes() {
+        return siteService.getAllSiteTypes();
     }
 
 }

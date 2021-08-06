@@ -18,7 +18,9 @@ public class SiteEntity {
     private String siteName;
     private String siteAddress;
     private String siteGeo;
-    private Integer siteTypeId;
+    @OneToOne
+    @JoinColumn(name = "site_type_id")
+    private SiteTypeEntity siteType;
     private Integer siteMapId;
     @OneToOne
     @JoinColumn(name = "cl_id")
@@ -26,11 +28,11 @@ public class SiteEntity {
 
     private String conditionType;
 
-    public SiteEntity(String siteName, String siteAddress, String siteGeo, Integer siteTypeId, Integer siteMapId, ClientEntity client, String conditionType) {
+    public SiteEntity(String siteName, String siteAddress, String siteGeo, SiteTypeEntity siteType, Integer siteMapId, ClientEntity client, String conditionType) {
         this.siteName = siteName;
         this.siteAddress = siteAddress;
         this.siteGeo = siteGeo;
-        this.siteTypeId = siteTypeId;
+        this.siteType = siteType;
         this.siteMapId = siteMapId;
         this.client = client;
         this.conditionType = conditionType;

@@ -16,7 +16,7 @@ public class Site {
     private String siteName;
     private String siteAddress;
     private String siteGeo;
-    private Integer siteTypeId;
+    private SiteType siteType;
     private Integer siteMapId;
     private Client client;
     private String conditionType;

@@ -13,14 +13,14 @@ public final class Converter {
         // Empty Constructor as this is a Util Class.
     }
 
-    public static SiteEntity buildSiteEntityFromSite(Site site, ClientEntity clientEntity) {
-        if (site == null || clientEntity == null) {
+    public static SiteEntity buildSiteEntityFromSite(Site site, ClientEntity clientEntity, SiteTypeEntity siteTypeEntity) {
+        if (site == null || clientEntity == null || siteTypeEntity == null) {
             return null;
         }
         return new SiteEntity(site.getSiteName(),
                 site.getSiteAddress(),
                 site.getSiteGeo(),
-                site.getSiteTypeId(),
+                siteTypeEntity,
                 site.getSiteMapId(),
                 clientEntity,
                 site.getConditionType());
@@ -34,10 +34,14 @@ public final class Converter {
                 site.getSiteName(),
                 site.getSiteAddress(),
                 site.getSiteGeo(),
-                site.getSiteTypeId(),
+                getSiteTypeEntityFromSiteType(site.getSiteType()),
                 site.getSiteMapId(),
                 clientEntity,
                 site.getConditionType());
+    }
+
+    private static SiteTypeEntity getSiteTypeEntityFromSiteType(SiteType siteType) {
+        return new SiteTypeEntity(siteType.getSiteTypeId(), siteType.getSiteTypeName());
     }
 
 
@@ -77,7 +81,7 @@ public final class Converter {
                 siteEntity.getSiteName(),
                 siteEntity.getSiteAddress(),
                 siteEntity.getSiteGeo(),
-                siteEntity.getSiteTypeId(),
+                getSiteTypeFromSiteTypeEntity(siteEntity.getSiteType()),
                 siteEntity.getSiteMapId(),
                 getClientFromClientEntity(siteEntity.getClient()),
                 siteEntity.getConditionType());
@@ -151,5 +155,26 @@ public final class Converter {
             }
         });
         return masterConcerns;
+    }
+
+    public static List<SiteType> getSiteTypesFromSiteTypeEntities(List<SiteTypeEntity> siteTypeEntities) {
+        List<SiteType> siteTypes = new ArrayList<>();
+        if(CollectionUtils.isEmpty(siteTypeEntities)) {
+            return siteTypes;
+        }
+        siteTypeEntities.stream().forEach(siteTypeEntity -> {
+            SiteType siteType = getSiteTypeFromSiteTypeEntity(siteTypeEntity);
+            if(siteType != null) {
+                siteTypes.add(siteType);
+            }
+        });
+        return siteTypes;
+    }
+
+    private static SiteType getSiteTypeFromSiteTypeEntity(SiteTypeEntity siteTypeEntity) {
+        if(siteTypeEntity == null) {
+            return null;
+        }
+        return new SiteType(siteTypeEntity.getSiteTypeId(), siteTypeEntity.getSiteTypeName());
     }
 }
