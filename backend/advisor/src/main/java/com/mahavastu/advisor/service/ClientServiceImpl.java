@@ -4,10 +4,13 @@ import com.mahavastu.advisor.entity.ClientEntity;
 import com.mahavastu.advisor.entity.OccupationEntity;
 import com.mahavastu.advisor.entity.converter.Converter;
 import com.mahavastu.advisor.model.Client;
+import com.mahavastu.advisor.model.Occupation;
 import com.mahavastu.advisor.repository.ClientRepository;
 import com.mahavastu.advisor.repository.OccupationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ClientServiceImpl implements ClientService{
@@ -40,5 +43,11 @@ public class ClientServiceImpl implements ClientService{
             return Converter.getClientFromClientEntity(savedEntity);
         }
         return null;
+    }
+
+    @Override
+    public List<Occupation> getAllOccupations() {
+        List<OccupationEntity> occupationEntities = occupationRepository.findAll();
+        return Converter.getOccupationsFromOccupationEntities(occupationEntities);
     }
 }

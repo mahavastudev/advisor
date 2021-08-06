@@ -177,4 +177,25 @@ public final class Converter {
         }
         return new SiteType(siteTypeEntity.getSiteTypeId(), siteTypeEntity.getSiteTypeName());
     }
+
+    public static List<Occupation> getOccupationsFromOccupationEntities(List<OccupationEntity> occupationEntities) {
+        List<Occupation> occupations = new ArrayList<>();
+        if(CollectionUtils.isEmpty(occupationEntities)) {
+            return occupations;
+        }
+        occupationEntities.stream().forEach(occupationEntity -> {
+            Occupation occupation = getOccupationFromOccupationEntity(occupationEntity);
+            if(occupation != null) {
+                occupations.add(occupation);
+            }
+        });
+        return occupations;
+    }
+
+    public static Occupation getOccupationFromOccupationEntity(OccupationEntity occupationEntity) {
+        if(occupationEntity == null) {
+            return null;
+        }
+        return new Occupation(occupationEntity.getOccupationId(), occupationEntity.getOccupationName());
+    }
 }
