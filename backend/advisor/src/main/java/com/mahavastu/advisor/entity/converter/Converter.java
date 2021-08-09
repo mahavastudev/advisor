@@ -1,9 +1,14 @@
 package com.mahavastu.advisor.entity.converter;
 
 import com.mahavastu.advisor.entity.*;
+import com.mahavastu.advisor.entity.advice.AdviceEntity;
+import com.mahavastu.advisor.entity.advice.SiteQueryCompositeKey;
 import com.mahavastu.advisor.model.*;
 import org.springframework.util.CollectionUtils;
 
+import javax.persistence.EmbeddedId;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -197,5 +202,62 @@ public final class Converter {
             return null;
         }
         return new Occupation(occupationEntity.getOccupationId(), occupationEntity.getOccupationName());
+    }
+
+    public static AdviceEntity getAdviceEntityFromAdvice(Advice advice, UserQueryEntity userQueryEntity, SiteEntity siteEntity, ClientEntity clientEntity) {
+        if(advice == null || userQueryEntity == null || siteEntity == null || clientEntity == null) {
+            return null;
+        }
+        return new AdviceEntity(new SiteQueryCompositeKey(siteEntity, userQueryEntity, advice.getLevel(), advice.getZone()),
+                advice.getEvaluation(),
+                advice.getSuggestions(),
+                advice.getTypeOfEntrance(),
+                advice.getEntrance(),
+                advice.getDishabal(),
+                advice.getStatus());
+    }
+
+    public static List<AdviceEntity> getAdviceEntitiesFromAdvices(List<Advice> advices, UserQueryEntity userQueryEntity, SiteEntity siteEntity, ClientEntity clientEntity) {
+        List<AdviceEntity> adviceEntities = new ArrayList<>();
+        if(CollectionUtils.isEmpty(advices)) {
+            return adviceEntities;
+        }
+        advices.stream().forEach(advice -> {
+            AdviceEntity adviceEntity = getAdviceEntityFromAdvice(advice, userQueryEntity, siteEntity, clientEntity);
+            if(adviceEntity != null) {
+                adviceEntities.add(adviceEntity);
+            }
+        });
+        return adviceEntities;
+    }
+
+    public static List<Advice> getAdvicesFromAdviceEntities(List<AdviceEntity> adviceEntities) {
+        List<Advice> advices = new ArrayList<>();
+        if(CollectionUtils.isEmpty(adviceEntities)) {
+            return advices;
+        }
+        adviceEntities.stream().forEach(adviceEntity -> {
+            Advice advice = getAdviceFromAdviceEntity(adviceEntity);
+            if(advice != null) {
+                advices.add(advice);
+            }
+        });
+        return advices;
+    }
+
+    public static Advice getAdviceFromAdviceEntity(AdviceEntity adviceEntity) {
+        if(adviceEntity == null) {
+            return null;
+        }
+        return new Advice(getUserQueryFromUserQueryEntity(adviceEntity.getSiteQueryCompositeKey().getUserQueryEntity()),
+                getSiteFromSiteEntity(adviceEntity.getSiteQueryCompositeKey().getSiteEntity()),
+                adviceEntity.getSiteQueryCompositeKey().getLevel(),
+                adviceEntity.getSiteQueryCompositeKey().getZone(),
+                adviceEntity.getEvaluation(),
+                adviceEntity.getSuggestions(),
+                adviceEntity.getTypeOfEntrance(),
+                adviceEntity.getEntrance(),
+                adviceEntity.getDishabal(),
+                adviceEntity.getStatus());
     }
 }
