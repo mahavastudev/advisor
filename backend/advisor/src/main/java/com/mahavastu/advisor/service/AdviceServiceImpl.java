@@ -42,7 +42,7 @@ public class AdviceServiceImpl implements AdviceService{
         }
         Advice firstAdvice = advices.iterator().next();
         UserQueryEntity userQueryEntity = userQueryRepository.getById(firstAdvice.getUserQuery().getQueryId());
-        SiteEntity siteEntity = siteRepository.getById(firstAdvice.getSite().getSiteId());
+        SiteEntity siteEntity = siteRepository.getById(firstAdvice.getUserQuery().getSiteId());
         ClientEntity clientEntity = clientRepository.getById(firstAdvice.getUserQuery().getClient().getClientId());
 
         List<AdviceEntity> adviceEntities = Converter.getAdviceEntitiesFromAdvices(advices, userQueryEntity, siteEntity, clientEntity);

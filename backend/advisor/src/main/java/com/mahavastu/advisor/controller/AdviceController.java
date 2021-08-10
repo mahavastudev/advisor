@@ -4,6 +4,7 @@ import com.mahavastu.advisor.model.Advice;
 import com.mahavastu.advisor.model.LevelEnum;
 import com.mahavastu.advisor.service.AdviceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +17,10 @@ public class AdviceController {
     @Autowired
     private AdviceService adviceService;
 
-    @PostMapping
-    public String advice(List<Advice> advices) {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String advice(@RequestBody List<Advice> advices) {
+
+        System.out.println(advices);
         return adviceService.advice(advices);
     }
 
