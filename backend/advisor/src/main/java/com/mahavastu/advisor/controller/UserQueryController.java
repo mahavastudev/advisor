@@ -14,7 +14,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @RestController
-// @CrossOrigin("http://localhost:4200")
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("user-query")
 public class UserQueryController {
 
