@@ -1,16 +1,25 @@
 package com.mahavastu.advisor.entity.converter;
 
-import com.mahavastu.advisor.entity.*;
-import com.mahavastu.advisor.entity.advice.AdviceEntity;
-import com.mahavastu.advisor.entity.advice.SiteQueryCompositeKey;
-import com.mahavastu.advisor.model.*;
-import org.springframework.util.CollectionUtils;
-
-import javax.persistence.EmbeddedId;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.util.CollectionUtils;
+
+import com.mahavastu.advisor.entity.ClientEntity;
+import com.mahavastu.advisor.entity.MasterConcernEntity;
+import com.mahavastu.advisor.entity.OccupationEntity;
+import com.mahavastu.advisor.entity.SiteEntity;
+import com.mahavastu.advisor.entity.SiteTypeEntity;
+import com.mahavastu.advisor.entity.UserQueryEntity;
+import com.mahavastu.advisor.entity.advice.AdviceEntity;
+import com.mahavastu.advisor.entity.advice.SiteQueryCompositeKey;
+import com.mahavastu.advisor.model.Advice;
+import com.mahavastu.advisor.model.Client;
+import com.mahavastu.advisor.model.MasterConcern;
+import com.mahavastu.advisor.model.Occupation;
+import com.mahavastu.advisor.model.Site;
+import com.mahavastu.advisor.model.SiteType;
+import com.mahavastu.advisor.model.UserQuery;
 
 public final class Converter {
 
