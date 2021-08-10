@@ -1,6 +1,7 @@
 package com.mahavastu.advisor.entity.converter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.util.CollectionUtils;
@@ -168,6 +169,7 @@ public final class Converter {
                 masterConcerns.add(masterConcern);
             }
         });
+        Collections.sort(masterConcerns, (o1, o2) -> o1.getConcernName().compareTo(o2.getConcernName()));
         return masterConcerns;
     }
 
