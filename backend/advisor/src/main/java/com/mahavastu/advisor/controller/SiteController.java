@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-// @CrossOrigin("http://localhost:4200")
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("site")
 public class SiteController {
 
