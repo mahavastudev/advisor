@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:4200")
+// @CrossOrigin("http://localhost:4200")
 @RequestMapping("site")
 public class SiteController {
 
@@ -20,6 +20,11 @@ public class SiteController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Site addSite(@RequestBody Site site) {
         return siteService.addSite(site);
+    }
+
+    @GetMapping
+    public List<Site> getAllSites() {
+        return siteService.getAllSites();
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -11,4 +11,5 @@ public interface SiteService {
     List<Site> getSitesByClientId(Integer clientId);
     List<SiteType> getAllSiteTypes();
     Site updateSite(Site site);
+    List<Site> getAllSites();
 }

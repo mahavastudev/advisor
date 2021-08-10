@@ -75,4 +75,9 @@ public class SiteServiceImpl implements SiteService{
     public List<SiteType> getAllSiteTypes() {
         return Converter.getSiteTypesFromSiteTypeEntities(siteTypeRepository.findAll());
     }
+
+    @Override
+    public List<Site> getAllSites() {
+        return Converter.getSitesFromSiteEntities(siteRepository.findAll());
+    }
 }

@@ -63,9 +63,8 @@ public class AdviceServiceImpl implements AdviceService{
     @Override
     public List<Advice> getAdvices(Integer queryId, Integer siteId, LevelEnum level) {
 
-//        List<AdviceEntity> adviceEntities = adviceRepository.getAdvicesForQuerySiteAndLevel(queryId, siteId, level.toString());
-//        List<Advice> advices = Converter.getAdvicesFromAdviceEntities(adviceEntities);
-//        return advices;
-        return new ArrayList<>();
+        List<AdviceEntity> adviceEntities = adviceRepository.getAdvicesForQuerySiteAndLevel(queryId, siteId, level.toString());
+        List<Advice> advices = Converter.getAdvicesFromAdviceEntities(adviceEntities);
+        return advices;
     }
 }
