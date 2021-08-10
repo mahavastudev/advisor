@@ -63,4 +63,9 @@ public class UserQueryServiceImpl implements UserQueryService {
     public UserQuery getQueryById(Integer userQueryId) {
         return Converter.getUserQueryFromUserQueryEntity(userQueryRepository.getById(userQueryId));
     }
+
+    @Override
+    public List<UserQuery> getAllQueries() {
+        return Converter.getUserQueriesFromUserQueryEntities(userQueryRepository.findAll());
+    }
 }

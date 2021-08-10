@@ -8,4 +8,5 @@ public interface UserQueryService {
     UserQuery addUserQuery(UserQuery userQuery);
     List<UserQuery> getUserQueriesByClientId(Integer clientId);
     UserQuery getQueryById(Integer userQueryId);
+    List<UserQuery> getAllQueries();
 }

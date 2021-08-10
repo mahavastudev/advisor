@@ -14,7 +14,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:4200")
+// @CrossOrigin("http://localhost:4200")
 @RequestMapping("user-query")
 public class UserQueryController {
 
@@ -25,6 +25,12 @@ public class UserQueryController {
     public UserQuery addQuery(@RequestBody UserQuery userQuery) {
 
         return userQueryService.addUserQuery(userQuery);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<UserQuery> getAllQueries() {
+        return userQueryService.getAllQueries();
     }
 
     @GetMapping("/user-query-id/{userQueryId}")
@@ -40,10 +46,6 @@ public class UserQueryController {
         return userQueryService.getUserQueriesByClientId(clientId);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public UserQuery getDummyUserQuery() {
-        return new UserQuery(1, new Client(), "Query Text", new Timestamp(Calendar.getInstance().getTimeInMillis()), new Timestamp(Calendar.getInstance().getTimeInMillis()), 1, 1, new MasterConcern(1, "DummyConcern"));
-    }
+
 
 }
