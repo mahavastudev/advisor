@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface AdviceRepository extends JpaRepository<AdviceEntity, SiteQueryCompositeKey> {
 
-    @Query("SELECT * FROM mv_advice WHERE query_id = ?1 AND site_id = ?2 AND level =?3")
-    List<AdviceEntity> getAdvicesForQuerySiteAndLevel(Integer queryId, Integer siteId, String level);
+//    @Query("SELECT a FROM mv_advice a WHERE a.query_id = ?1 AND a.site_id = ?2 AND a.level =?3")
+//    List<AdviceEntity> getAdvicesForQuerySiteAndLevel(Integer queryId, Integer siteId, String level);
 }
