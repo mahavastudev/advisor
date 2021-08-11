@@ -1,10 +1,16 @@
 package com.mahavastu.advisor.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
 import com.mahavastu.advisor.entity.ClientEntity;
 import com.mahavastu.advisor.entity.SiteEntity;
 import com.mahavastu.advisor.entity.UserQueryEntity;
 import com.mahavastu.advisor.entity.advice.AdviceEntity;
-import com.mahavastu.advisor.entity.advice.SiteQueryCompositeKey;
 import com.mahavastu.advisor.entity.converter.Converter;
 import com.mahavastu.advisor.model.Advice;
 import com.mahavastu.advisor.model.LevelEnum;
@@ -13,12 +19,7 @@ import com.mahavastu.advisor.repository.AdviceRepository;
 import com.mahavastu.advisor.repository.ClientRepository;
 import com.mahavastu.advisor.repository.SiteRepository;
 import com.mahavastu.advisor.repository.UserQueryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.mahavastu.advisor.utility.EnumUtility;
 
 @Service
 public class AdviceServiceImpl implements AdviceService{
@@ -66,9 +67,8 @@ public class AdviceServiceImpl implements AdviceService{
     }
 
     @Override
-    public List<Advice> getAdvices(Integer queryId, Integer siteId, LevelEnum level) {
-
-        List<AdviceEntity> adviceEntities = adviceRepository.getAdvicesForQuerySiteAndLevel(queryId, siteId, level.toString());
+    public List<Advice> getAdvices(Integer queryId, Integer siteId, LevelEnum levelEnum) {
+        List<AdviceEntity> adviceEntities = adviceRepository.getAdvicesForQuerySiteAndLevel(queryId, siteId, levelEnum);
         List<Advice> advices = Converter.getAdvicesFromAdviceEntities(adviceEntities);
         return advices;
     }

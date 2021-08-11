@@ -49,6 +49,12 @@ public class UserQueryController {
         return userQueryService.getUserQueriesByClientId(clientId);
     }
 
+    @GetMapping("/site/{siteId}")
+    @ResponseBody
+    public List<UserQuery> getUserQueriesBySiteId(@PathVariable("siteId") int siteId) {
+
+        return userQueryService.getUserQueriesBySiteId(siteId);
+    }
 
 
 }

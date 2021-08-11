@@ -9,4 +9,5 @@ public interface UserQueryService {
     List<UserQuery> getUserQueriesByClientId(Integer clientId);
     UserQuery getQueryById(Integer userQueryId);
     List<UserQuery> getAllQueries();
+    List<UserQuery> getUserQueriesBySiteId(int siteId);
 }

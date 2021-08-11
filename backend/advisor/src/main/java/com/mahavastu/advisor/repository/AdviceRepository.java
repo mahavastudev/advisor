@@ -2,6 +2,8 @@ package com.mahavastu.advisor.repository;
 
 import com.mahavastu.advisor.entity.advice.AdviceEntity;
 import com.mahavastu.advisor.entity.advice.SiteQueryCompositeKey;
+import com.mahavastu.advisor.model.LevelEnum;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +18,6 @@ public interface AdviceRepository extends JpaRepository<AdviceEntity, SiteQueryC
     List<AdviceEntity> getAdvicesForQuerySiteAndLevel(
             @Param("queryId") Integer queryId,
             @Param("siteId") Integer siteId,
-            @Param("level") String level);
+            @Param("level") LevelEnum level);
 
 }
