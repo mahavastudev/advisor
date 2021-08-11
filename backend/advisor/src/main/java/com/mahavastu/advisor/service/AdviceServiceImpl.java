@@ -1,6 +1,5 @@
 package com.mahavastu.advisor.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import com.mahavastu.advisor.repository.AdviceRepository;
 import com.mahavastu.advisor.repository.ClientRepository;
 import com.mahavastu.advisor.repository.SiteRepository;
 import com.mahavastu.advisor.repository.UserQueryRepository;
-import com.mahavastu.advisor.utility.EnumUtility;
 
 @Service
 public class AdviceServiceImpl implements AdviceService{
