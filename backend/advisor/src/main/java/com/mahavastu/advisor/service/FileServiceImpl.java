@@ -29,10 +29,15 @@ public class FileServiceImpl implements FileService
         {
             return "Could not store the file as incorrect parameters provided.";
         }
+        if(!file.getOriginalFilename().endsWith(".pdf")
+                && !file.getOriginalFilename().endsWith(".PDF"))
+        {
+            return "Please upload PDF's only.";
+        }
         try
         {
             String saveFileName = String
-                    .format("%s_%s_%s_%s", clientId, siteId, documentType, file.getOriginalFilename());
+                    .format("%s_%s_%s.pdf", clientId, siteId, documentType);
             
             Path root = Paths.get(getUploadParentPath());
             
@@ -40,7 +45,7 @@ public class FileServiceImpl implements FileService
             if (resolve.toFile()
                     .exists())
             {
-                return String.format("File: %s already exists. Ask Admin to remove the same.", file.getOriginalFilename());
+                resolve.toFile().delete();
             }
             Files.copy(file.getInputStream(), resolve);
             return "File Uploaded";

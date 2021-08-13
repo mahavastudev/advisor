@@ -18,7 +18,7 @@ public class FileController
     @Autowired
     private FileService fileService;
     
-    @PostMapping
+    @PostMapping("/query-pdfs")
     public String uploadFile(@ModelAttribute TransportFile transportFile)
     {
         return fileService.uploadFile(transportFile);

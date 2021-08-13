@@ -19,4 +19,5 @@ public class TransportFile
     private Integer clientId;
     private Integer siteId;
     private String documentType;
+    private Integer queryId;
 }
