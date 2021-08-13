@@ -28,7 +28,8 @@ public class ClientEntity {
     private String clientEmail;
 
     @Column(name = "cl_display_pic")
-    private String clientDisplayPic;
+    @Lob
+    private byte[] clientDisplayPic;
 
     @Column(name = "cl_poc")
     private String clientPOC;
@@ -40,7 +41,7 @@ public class ClientEntity {
     @Column(name = "cl_password")
     private String password;
 
-    public ClientEntity(String clientName, String clientMobile, String clientEmail, String clientDisplayPic, String clientPOC, OccupationEntity occupation, String password) {
+    public ClientEntity(String clientName, String clientMobile, String clientEmail, byte[] clientDisplayPic, String clientPOC, OccupationEntity occupation, String password) {
         this.clientName = clientName;
         this.clientMobile = clientMobile;
         this.clientEmail = clientEmail;

@@ -17,7 +17,7 @@ public class Client {
     private String clientName;
     private String clientMobile;
     private String clientEmail;
-    private String clientDisplayPic;
+    private byte[] clientDisplayPic;
     private String clientPOC;
     private Occupation occupation;
     private String password;

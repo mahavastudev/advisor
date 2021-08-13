@@ -148,6 +148,18 @@ public final class Converter {
         if (client == null) {
             return null;
         }
+        if(client.getClientId() != null)
+        {
+            return new ClientEntity(
+                    client.getClientId(),
+                    client.getClientName(),
+                    client.getClientMobile(),
+                    client.getClientEmail(),
+                    client.getClientDisplayPic(),
+                    client.getClientPOC(),
+                    occupationEntity,
+                    client.getPassword());
+        }
         return new ClientEntity(client.getClientName(),
                 client.getClientMobile(),
                 client.getClientEmail(),
@@ -224,6 +236,11 @@ public final class Converter {
                 advice.getSuggestions(),
                 advice.getTypeOfEntrance(),
                 advice.getEntrance(),
+                advice.getPrakriti(),
+                advice.getBuildingActivity(),
+                advice.getActivity(),
+                advice.getPersonsActivity(),
+                advice.getPrakrtitSink(),
                 advice.getDishabal(),
                 advice.getStatus());
     }
@@ -268,7 +285,13 @@ public final class Converter {
                 adviceEntity.getSuggestions(),
                 adviceEntity.getTypeOfEntrance(),
                 adviceEntity.getEntrance(),
+                adviceEntity.getPrakriti(),
+                adviceEntity.getBuildingActivity(),
+                adviceEntity.getActivity(),
+                adviceEntity.getPersonsActivity(),
+                adviceEntity.getPrakrtitSink(),
                 adviceEntity.getDishabal(),
                 adviceEntity.getStatus());
     }
+    
 }

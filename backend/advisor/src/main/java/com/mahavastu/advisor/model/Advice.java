@@ -22,6 +22,19 @@ public class Advice {
     private String typeOfEntrance;
     private String entrance;
 
+    // LEVEL_1_B_PRAKRITI_BUILDING
+    private String prakriti;
+    private String buildingActivity;
+
+    // LEVEL_1_B_PRAKRITI_OF_PERSON
+    private String activity;
+    
+    // LEVEL_1_B_SUGGESTION_FOR_PRAKRITI
+    // private String prakriti;
+    private String personsActivity;
+    // private String buildingActivity;
+    private String prakrtitSink;
+    
     // Level 1 B - Dishabal
     private Integer dishabal;
     private String status;

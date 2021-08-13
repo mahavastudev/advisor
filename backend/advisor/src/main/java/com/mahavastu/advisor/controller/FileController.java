@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mahavastu.advisor.model.Client;
 import com.mahavastu.advisor.model.TransportFile;
 import com.mahavastu.advisor.service.FileService;
 
@@ -22,5 +23,11 @@ public class FileController
     public String uploadFile(@ModelAttribute TransportFile transportFile)
     {
         return fileService.uploadFile(transportFile);
+    }
+    
+    @PostMapping("/profile-pic")
+    public Client uploadProfilePic(@ModelAttribute TransportFile transportFile)
+    {
+        return fileService.uploadProfilePic(transportFile);
     }
 }
