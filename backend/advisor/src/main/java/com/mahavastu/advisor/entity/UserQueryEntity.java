@@ -36,6 +36,8 @@ public class UserQueryEntity {
     @OneToOne
     @JoinColumn(name = "concern_id")
     private MasterConcernEntity masterConcernEntity;
+    
+    private boolean isActive = true;
 
     public UserQueryEntity(ClientEntity client, String queryText, Timestamp queryCreateDateTime, Timestamp queryUpdateDateTime, SiteEntity site, Integer horoId, MasterConcernEntity masterConcernEntity) {
         this.client = client;

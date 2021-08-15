@@ -11,7 +11,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ClientEntity {
+public class ClientEntity
+{
 
     @Id
     @Column(name = "cl_id")
@@ -27,9 +28,9 @@ public class ClientEntity {
     @Column(name = "cl_email")
     private String clientEmail;
 
-    @Column(name = "cl_display_pic")
-    @Lob
-    private byte[] clientDisplayPic;
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private ClientImageMasterEntity clientImageMasterEntity;
 
     @Column(name = "cl_poc")
     private String clientPOC;
@@ -41,11 +42,19 @@ public class ClientEntity {
     @Column(name = "cl_password")
     private String password;
 
-    public ClientEntity(String clientName, String clientMobile, String clientEmail, byte[] clientDisplayPic, String clientPOC, OccupationEntity occupation, String password) {
+    public ClientEntity(
+            String clientName,
+            String clientMobile,
+            String clientEmail,
+            ClientImageMasterEntity clientImageMasterEntity,
+            String clientPOC,
+            OccupationEntity occupation,
+            String password)
+    {
         this.clientName = clientName;
         this.clientMobile = clientMobile;
         this.clientEmail = clientEmail;
-        this.clientDisplayPic = clientDisplayPic;
+        this.clientImageMasterEntity = clientImageMasterEntity;
         this.clientPOC = clientPOC;
         this.occupation = occupation;
         this.password = password;

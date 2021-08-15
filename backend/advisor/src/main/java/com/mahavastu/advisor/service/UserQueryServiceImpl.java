@@ -59,7 +59,7 @@ public class UserQueryServiceImpl implements UserQueryService
     public List<UserQuery> getUserQueriesByClientId(Integer clientId)
     {
         ClientEntity clientEntity = clientRepository.getById(clientId);
-        List<UserQueryEntity> userQueryEntities = userQueryRepository.findByClient(clientEntity);
+        List<UserQueryEntity> userQueryEntities = userQueryRepository.findByClientAndIsActive(clientEntity, true);
         List<UserQuery> userQueries = Converter.getUserQueriesFromUserQueryEntities(userQueryEntities);
         return userQueries;
     }
@@ -73,15 +73,38 @@ public class UserQueryServiceImpl implements UserQueryService
     @Override
     public List<UserQuery> getAllQueries()
     {
-        return Converter.getUserQueriesFromUserQueryEntities(userQueryRepository.findAll());
+        return Converter.getUserQueriesFromUserQueryEntities(userQueryRepository.findByIsActive(true));
     }
 
     @Override
     public List<UserQuery> getUserQueriesBySiteId(int siteId)
     {
         SiteEntity siteEntity = siteRepository.getById(siteId);
-        List<UserQueryEntity> userQueryEntities = userQueryRepository.findBySite(siteEntity);
+        List<UserQueryEntity> userQueryEntities = userQueryRepository.findBySiteAndIsActive(siteEntity, true);
         List<UserQuery> userQueries = Converter.getUserQueriesFromUserQueryEntities(userQueryEntities);
         return userQueries;
+    }
+
+    @Override
+    public String resolveQueryByQueryId(int userQueryId)
+    {
+        try
+        {
+            UserQueryEntity userQueryEntity = userQueryRepository.getById(userQueryId);
+            userQueryEntity.setActive(false);
+            UserQueryEntity savedEntity = userQueryRepository.save(userQueryEntity);
+            return String.format(
+                    "Query related to site %s for concern %s, and Query id as %s is marked as resolved.",
+                    savedEntity.getSite().getSiteName(),
+                    savedEntity.getMasterConcernEntity().getConcernName(),
+                    userQueryId);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return String.format(
+                    "Query with id as %s could not be marked as resolved.",
+                    userQueryId);
+        }
     }
 }

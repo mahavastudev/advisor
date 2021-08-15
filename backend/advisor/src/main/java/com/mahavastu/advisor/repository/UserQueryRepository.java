@@ -12,6 +12,7 @@ import com.mahavastu.advisor.entity.UserQueryEntity;
 
 @Repository
 public interface UserQueryRepository extends JpaRepository<UserQueryEntity, Integer> {
-    List<UserQueryEntity> findByClient(@Param("cl_id") ClientEntity clientEntity);
-    List<UserQueryEntity> findBySite(@Param("site_id") SiteEntity siteEntity);
+    List<UserQueryEntity> findByClientAndIsActive(@Param("cl_id") ClientEntity clientEntity, @Param("is_active") boolean isActive);
+    List<UserQueryEntity> findByIsActive(@Param("is_active") boolean isActive);
+    List<UserQueryEntity> findBySiteAndIsActive(@Param("site_id") SiteEntity siteEntity, @Param("is_active") boolean isActive);
 }

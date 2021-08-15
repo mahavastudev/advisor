@@ -36,25 +36,29 @@ public class UserQueryController {
         return userQueryService.getAllQueries();
     }
 
-    @GetMapping("/user-query-id/{userQueryId}")
+    @GetMapping("/user-query-id/{user-query-id}")
     @ResponseBody
-    public UserQuery getUserQueryByQueryId(@PathVariable("userQueryId") int userQueryId) {
+    public UserQuery getUserQueryByQueryId(@PathVariable("user-query-id") int userQueryId) {
         return userQueryService.getQueryById(userQueryId);
     }
 
-    @GetMapping("/client/{clientId}")
+    @GetMapping("/client/{client-id}")
     @ResponseBody
-    public List<UserQuery> getUserQueriesByClientId(@PathVariable("clientId") int clientId) {
+    public List<UserQuery> getUserQueriesByClientId(@PathVariable("client-id") int clientId) {
 
         return userQueryService.getUserQueriesByClientId(clientId);
     }
 
-    @GetMapping("/site/{siteId}")
+    @GetMapping("/site/{site-id}")
     @ResponseBody
-    public List<UserQuery> getUserQueriesBySiteId(@PathVariable("siteId") int siteId) {
+    public List<UserQuery> getUserQueriesBySiteId(@PathVariable("site-id") int siteId) {
 
         return userQueryService.getUserQueriesBySiteId(siteId);
     }
 
-
+    @PostMapping("/resolve-query/{user-query-id}")
+    @ResponseBody
+    public String resolveQueryByQueryId(@PathVariable("user-query-id") int userQueryId) {
+        return userQueryService.resolveQueryByQueryId(userQueryId);
+    }
 }

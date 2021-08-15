@@ -16,6 +16,8 @@ import java.io.Serializable;
 @ToString
 public class SiteQueryCompositeKey implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @OneToOne
     @JoinColumn(name = "site_id")
     private SiteEntity siteEntity;
