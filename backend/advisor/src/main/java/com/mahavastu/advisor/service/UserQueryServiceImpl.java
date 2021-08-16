@@ -34,6 +34,11 @@ public class UserQueryServiceImpl implements UserQueryService
     @Autowired
     private MasterConcernRepository masterConcernRepository;
 
+    @Autowired
+    private MailService mailService;
+
+    private static String MAIL_CONTENT_STRING = "Hi, \n\n A new query has been registered by the Client: %s (client-id: %s) for the site: %s (site-id: %s) with the text of the query as:\n\n%s: %s\n\nThanks and Regards,\nMahavastu Advisor Team";
+
     @Override
     public UserQuery addUserQuery(UserQuery userQuery)
     {
@@ -51,6 +56,26 @@ public class UserQueryServiceImpl implements UserQueryService
         userQueryEntity.setQueryCreateDatetime(currentTimestamp);
         userQueryEntity.setQueryUpdateDatetime(currentTimestamp);
         UserQueryEntity savedEntity = userQueryRepository.save(userQueryEntity);
+
+        new Thread(new Runnable()
+        {
+
+            @Override
+            public void run()
+            {
+                mailService.sendQueryRegisteredMail(
+                        "New Query Registered Notification",
+                        String.format(
+                                MAIL_CONTENT_STRING,
+                                savedEntity.getClient().getClientName(),
+                                savedEntity.getClient().getClientId(),
+                                savedEntity.getSite().getSiteName(),
+                                savedEntity.getSite().getSiteId(),
+                                savedEntity.getMasterConcernEntity().getConcernName(),
+                                savedEntity.getQueryText()));
+            }
+        }).start();
+
         return Converter.getUserQueryFromUserQueryEntity(savedEntity);
 
     }
