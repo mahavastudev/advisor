@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +18,6 @@ import com.mahavastu.advisor.entity.ClientEntity;
 import com.mahavastu.advisor.entity.ClientImageMasterEntity;
 import com.mahavastu.advisor.entity.converter.Converter;
 import com.mahavastu.advisor.model.Client;
-import com.mahavastu.advisor.model.Site;
 import com.mahavastu.advisor.model.TransportFile;
 import com.mahavastu.advisor.model.UserQuery;
 import com.mahavastu.advisor.repository.AdvisorAppMetadataRepositroy;
@@ -42,9 +40,6 @@ public class FileServiceImpl implements FileService
 
     @Autowired
     private ClientImageMasterRepository clientImageMasterRepository;
-
-    @Autowired
-    private SiteService siteService;
 
     private String getUploadParentPath()
     {
@@ -145,18 +140,6 @@ public class FileServiceImpl implements FileService
         }
         try
         {
-            String saveFileName = String
-                    .format("profile-pics\\%s_profile-pic_%s", clientId, file.getOriginalFilename());
-
-            Path root = Paths.get(getUploadParentPath());
-
-            Path resolve = root.resolve(saveFileName);
-            if (resolve.toFile()
-                    .exists())
-            {
-                resolve.toFile().delete();
-            }
-
             return updateClient(transportFile.getClientId(), transportFile.getFile().getBytes());
         }
         catch (Exception e)
