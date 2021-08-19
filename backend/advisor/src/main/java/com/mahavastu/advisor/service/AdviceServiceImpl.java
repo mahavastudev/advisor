@@ -2,6 +2,8 @@ package com.mahavastu.advisor.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -18,6 +20,7 @@ import com.mahavastu.advisor.repository.AdviceRepository;
 import com.mahavastu.advisor.repository.ClientRepository;
 import com.mahavastu.advisor.repository.SiteRepository;
 import com.mahavastu.advisor.repository.UserQueryRepository;
+import com.mahavastu.advisor.utility.FileUtility;
 
 @Service
 public class AdviceServiceImpl implements AdviceService{
@@ -69,5 +72,36 @@ public class AdviceServiceImpl implements AdviceService{
         List<AdviceEntity> adviceEntities = adviceRepository.getAdvicesForQuerySiteAndLevel(queryId, siteId, levelEnum);
         List<Advice> advices = Converter.getAdvicesFromAdviceEntities(adviceEntities);
         return advices;
+    }
+
+    @Override
+    public void generateAdvicePdfForQuery(HttpServletResponse response, Integer queryId)
+    {
+        String filePath = createPdfAndGetFilePath(queryId);
+        FileUtility.updateResponseWithFilePath(response, filePath);
+    }
+
+    private String createPdfAndGetFilePath(Integer queryId)
+    {
+        List<AdviceEntity> adviceEntities = adviceRepository.findByQueryId(queryId);
+        if(CollectionUtils.isEmpty(adviceEntities))
+        {
+            return null;
+        }
+        List<Advice> advices = Converter.getAdvicesFromAdviceEntities(adviceEntities);
+        return createPdfAndGetFile(advices);
+    }
+
+    private String createPdfAndGetFile(List<Advice> advices)
+    {
+        return null;
+    }
+
+    @Override
+    public void generateAndSendAdvicePdfForQuery(HttpServletResponse response, Integer queryId)
+    {
+        // TODO OJASVI
+        String filePath = createPdfAndGetFilePath(queryId);
+        // send Mail and return response
     }
 }

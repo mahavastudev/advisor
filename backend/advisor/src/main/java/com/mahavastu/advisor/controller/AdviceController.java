@@ -2,6 +2,9 @@ package com.mahavastu.advisor.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,5 +39,23 @@ public class AdviceController {
                                    @PathVariable("level") LevelEnum level)
     {
         return adviceService.getAdvices(queryId, siteId, level);
+    }
+    
+    @GetMapping("/advice-pdf/{query-id}")
+    public void generateAdvicePdfForQuery(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @PathVariable("query-id") Integer queryId)
+    {
+        adviceService.generateAdvicePdfForQuery(response, queryId);
+    }
+    
+    @GetMapping("/advice-pdf/{query-id}")
+    public void generateAndSendAdvicePdfForQuery(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @PathVariable("query-id") Integer queryId)
+    {
+        adviceService.generateAndSendAdvicePdfForQuery(response, queryId);
     }
 }

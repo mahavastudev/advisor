@@ -1,14 +1,20 @@
 package com.mahavastu.advisor.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +51,6 @@ public class MailServiceImpl implements MailService
 
             message.setFrom(new InternetAddress(FROM));
 
-            // To get the array of addresses
             message.addRecipients(Message.RecipientType.TO, to);
 
             message.setSubject(subject);
@@ -65,6 +70,57 @@ public class MailServiceImpl implements MailService
         catch (MessagingException me)
         {
             me.printStackTrace();
+        }
+
+    }
+    
+    @Override
+    public void sendAdviceWithPdfMail(String subject, String content, String filePath, String to)
+    {
+        Session session = getSession();
+
+        MimeMessage message = new MimeMessage(session);
+
+        try
+        {
+
+            message.setFrom(new InternetAddress(FROM));
+
+            message.addRecipients(Message.RecipientType.TO, to);
+
+            message.setSubject(subject);
+            message.setText(content);
+            
+            BodyPart messageBodyPart = new MimeBodyPart(); 
+            messageBodyPart.setText(content);
+            
+            MimeBodyPart attachmentPart = new MimeBodyPart();
+            attachmentPart.attachFile(new File(filePath));
+            
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(messageBodyPart);
+            multipart.addBodyPart(attachmentPart);
+            
+            message.setContent(multipart);
+            
+            Transport transport = session.getTransport("smtp");
+            transport.connect(HOST, FROM, PASSWORD);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+            System.out.println("Mail sent");
+
+        }
+        catch (AddressException ae)
+        {
+            ae.printStackTrace();
+        }
+        catch (MessagingException me)
+        {
+            me.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
 
     }
