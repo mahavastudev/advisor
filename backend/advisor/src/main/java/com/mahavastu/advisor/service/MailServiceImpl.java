@@ -20,12 +20,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mahavastu.advisor.repository.AdvisorAppMetadataRepositroy;
+import com.mahavastu.advisor.repository.AdvisorRepository;
 
 @Service
 public class MailServiceImpl implements MailService
 {
     @Autowired
     private AdvisorAppMetadataRepositroy advisorAppMetadataRepositroy;
+    
+    @Autowired
+    private AdvisorRepository advisorRepository;
 
     private static final String FROM = "developer@mahavastu.com";
     private static final String USERNAME = "developer@mahavastu.com";

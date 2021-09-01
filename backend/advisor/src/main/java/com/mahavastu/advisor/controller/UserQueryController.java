@@ -56,9 +56,9 @@ public class UserQueryController {
         return userQueryService.getUserQueriesBySiteId(siteId);
     }
 
-    @PostMapping("/resolve-query")
+    @PostMapping("/resolve-query/{advisor-id}")
     @ResponseBody
-    public String resolveQueryByQueryId(@RequestBody UserQuery userQuery) {
-        return userQueryService.resolveQueryByQueryId(userQuery.getQueryId(), userQuery.getResolveText());
+    public String resolveQueryByQueryId(@RequestBody UserQuery userQuery, @PathVariable("advisor-id") int advisorId) {
+        return userQueryService.resolveQueryByQueryId(userQuery.getQueryId(), userQuery.getResolveText(), advisorId);
     }
 }

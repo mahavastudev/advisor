@@ -10,5 +10,5 @@ public interface UserQueryService {
     UserQuery getQueryById(Integer userQueryId);
     List<UserQuery> getAllQueries();
     List<UserQuery> getUserQueriesBySiteId(int siteId);
-    String resolveQueryByQueryId(int userQueryId, String resolveText);
+    String resolveQueryByQueryId(int userQueryId, String resolveText, int advisorId);
 }

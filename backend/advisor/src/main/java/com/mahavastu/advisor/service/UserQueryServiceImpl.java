@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.mahavastu.advisor.entity.AdvisorEntity;
 import com.mahavastu.advisor.entity.ClientEntity;
 import com.mahavastu.advisor.entity.MasterConcernEntity;
 import com.mahavastu.advisor.entity.SiteEntity;
 import com.mahavastu.advisor.entity.UserQueryEntity;
 import com.mahavastu.advisor.entity.converter.Converter;
 import com.mahavastu.advisor.model.UserQuery;
+import com.mahavastu.advisor.repository.AdvisorRepository;
 import com.mahavastu.advisor.repository.ClientRepository;
 import com.mahavastu.advisor.repository.MasterConcernRepository;
 import com.mahavastu.advisor.repository.SiteRepository;
@@ -37,6 +39,9 @@ public class UserQueryServiceImpl implements UserQueryService
 
     @Autowired
     private MailService mailService;
+    
+    @Autowired
+    private AdvisorRepository advisorRepository;
 
     private static String MAIL_CONTENT_STRING = "Hi, \n\n A new query has been registered by the Client: %s (client-id: %s) for the site: %s (site-id: %s) with the text of the query as:\n\n%s: %s\n\nThanks and Regards,\nMahavastu Advisor Team";
 
@@ -48,7 +53,7 @@ public class UserQueryServiceImpl implements UserQueryService
         MasterConcernEntity masterConcernEntity = masterConcernRepository.getById(userQuery.getMasterConcern().getConcernId());
 
         UserQueryEntity userQueryEntity = Converter
-                .getUserQueryEntityFromUserQuery(userQuery, clientEntity, siteEntity, masterConcernEntity);
+                .getUserQueryEntityFromUserQuery(userQuery, clientEntity, siteEntity, masterConcernEntity, null);
         if (userQueryEntity == null)
         {
             return null;
@@ -112,7 +117,7 @@ public class UserQueryServiceImpl implements UserQueryService
     }
 
     @Override
-    public String resolveQueryByQueryId(int userQueryId, String resolveText)
+    public String resolveQueryByQueryId(int userQueryId, String resolveText, int advisorId)
     {
         if(StringUtils.isEmpty(resolveText))
         {
@@ -121,8 +126,10 @@ public class UserQueryServiceImpl implements UserQueryService
         try
         {
             UserQueryEntity userQueryEntity = userQueryRepository.getById(userQueryId);
+            AdvisorEntity advisorEntity = advisorRepository.getById(advisorId);
             userQueryEntity.setActive(false);
             userQueryEntity.setResolveText(resolveText);
+            userQueryEntity.setAdvisorEntity(advisorEntity);
             UserQueryEntity savedEntity = userQueryRepository.save(userQueryEntity);
             return String.format(
                     "Query related to site %s for concern %s, and Query id as %s is marked as resolved.",

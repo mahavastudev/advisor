@@ -126,7 +126,8 @@ public final class Converter
             UserQuery userQuery,
             ClientEntity clientEntity,
             SiteEntity siteEntity,
-            MasterConcernEntity masterConcernEntity)
+            MasterConcernEntity masterConcernEntity,
+            AdvisorEntity advisorEntity)
     {
         if (userQuery == null || clientEntity == null || siteEntity == null)
         {
@@ -140,7 +141,8 @@ public final class Converter
                 siteEntity,
                 userQuery.getHoroId(),
                 masterConcernEntity,
-                userQuery.getResolveText());
+                userQuery.getResolveText(),
+                advisorEntity);
     }
 
     public static UserQuery getUserQueryFromUserQueryEntity(UserQueryEntity userQueryEntity)
@@ -159,7 +161,8 @@ public final class Converter
                 userQueryEntity.getHoroId(),
                 getMasterConcernFromMasterConcernEntity(userQueryEntity.getMasterConcernEntity()),
                 userQueryEntity.isActive(),
-                userQueryEntity.getResolveText());
+                userQueryEntity.getResolveText(),
+                null);
     }
 
     public static MasterConcern getMasterConcernFromMasterConcernEntity(MasterConcernEntity masterConcernEntity)

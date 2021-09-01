@@ -40,8 +40,12 @@ public class UserQueryEntity {
     private boolean isActive = true;
     
     private String resolveText;
+    
+    @OneToOne
+    @JoinColumn(name = "advisor_id")
+    private AdvisorEntity advisorEntity;
 
-    public UserQueryEntity(ClientEntity client, String queryText, Timestamp queryCreateDateTime, Timestamp queryUpdateDateTime, SiteEntity site, Integer horoId, MasterConcernEntity masterConcernEntity, String resolveText) {
+    public UserQueryEntity(ClientEntity client, String queryText, Timestamp queryCreateDateTime, Timestamp queryUpdateDateTime, SiteEntity site, Integer horoId, MasterConcernEntity masterConcernEntity, String resolveText, AdvisorEntity advisorEntity) {
         this.client = client;
         this.queryText = queryText;
         this.queryCreateDatetime = queryCreateDateTime;
@@ -50,5 +54,6 @@ public class UserQueryEntity {
         this.horoId = horoId;
         this.masterConcernEntity = masterConcernEntity;
         this.resolveText = resolveText;
+        this.advisorEntity = advisorEntity;
     }
 }

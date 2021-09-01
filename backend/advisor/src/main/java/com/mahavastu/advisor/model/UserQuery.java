@@ -22,4 +22,5 @@ public class UserQuery {
     private MasterConcern masterConcern;
     private boolean isActive;
     private String resolveText;
+    private Advisor advisor;
 }
