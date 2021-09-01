@@ -20,6 +20,6 @@ public interface AdviceRepository extends JpaRepository<AdviceEntity, SiteQueryC
             @Param("siteId") Integer siteId,
             @Param("level") LevelEnum level);
 
-    List<AdviceEntity> findByQueryId(Integer queryId);
+    List<AdviceEntity> findBySiteQueryCompositeKeyUserQueryEntityQueryId(Integer queryId);
 
 }

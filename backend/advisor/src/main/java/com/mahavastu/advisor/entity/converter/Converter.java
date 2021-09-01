@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.util.CollectionUtils;
 
+import com.mahavastu.advisor.entity.AdvisorEntity;
 import com.mahavastu.advisor.entity.ClientEntity;
 import com.mahavastu.advisor.entity.MasterConcernEntity;
 import com.mahavastu.advisor.entity.OccupationEntity;
@@ -15,6 +16,7 @@ import com.mahavastu.advisor.entity.UserQueryEntity;
 import com.mahavastu.advisor.entity.advice.AdviceEntity;
 import com.mahavastu.advisor.entity.advice.SiteQueryCompositeKey;
 import com.mahavastu.advisor.model.Advice;
+import com.mahavastu.advisor.model.Advisor;
 import com.mahavastu.advisor.model.Client;
 import com.mahavastu.advisor.model.MasterConcern;
 import com.mahavastu.advisor.model.Occupation;
@@ -137,7 +139,8 @@ public final class Converter
                 userQuery.getQueryCreateDatetime(),
                 siteEntity,
                 userQuery.getHoroId(),
-                masterConcernEntity);
+                masterConcernEntity,
+                userQuery.getResolveText());
     }
 
     public static UserQuery getUserQueryFromUserQueryEntity(UserQueryEntity userQueryEntity)
@@ -154,7 +157,8 @@ public final class Converter
                 userQueryEntity.getQueryUpdateDatetime(),
                 userQueryEntity.getSite().getSiteId(),
                 userQueryEntity.getHoroId(),
-                getMasterConcernFromMasterConcernEntity(userQueryEntity.getMasterConcernEntity()));
+                getMasterConcernFromMasterConcernEntity(userQueryEntity.getMasterConcernEntity()),
+                userQueryEntity.getResolveText());
     }
 
     public static MasterConcern getMasterConcernFromMasterConcernEntity(MasterConcernEntity masterConcernEntity)
@@ -403,6 +407,20 @@ public final class Converter
                 adviceEntity.getConcerns(),
                 adviceEntity.getIntuitiveDiagnosis(),
                 adviceEntity.getInner12Devta());
+    }
+
+    public static Advisor getAdvisorFromAdvisorEntity(AdvisorEntity advisorEntity)
+    {
+        if (advisorEntity == null)
+        {
+            return null;
+        }
+        return new Advisor(
+                advisorEntity.getAdvisorId(),
+                advisorEntity.getAdvisorName(),
+                advisorEntity.getAdvisorMobile(),
+                advisorEntity.getAdvisorEmail(),
+                null);
     }
 
 

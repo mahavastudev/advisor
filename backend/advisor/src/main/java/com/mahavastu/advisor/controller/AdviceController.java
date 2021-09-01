@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mahavastu.advisor.model.Advice;
+import com.mahavastu.advisor.model.Advisor;
 import com.mahavastu.advisor.model.LevelEnum;
 import com.mahavastu.advisor.model.RequestResult;
 import com.mahavastu.advisor.service.AdviceService;
@@ -28,6 +30,12 @@ public class AdviceController {
     @Autowired
     private AdviceService adviceService;
 
+    @PostMapping("/login")
+    @ResponseBody
+    public Advisor login(@RequestBody Advisor advisor) {
+        return adviceService.login(advisor);
+    }
+    
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public RequestResult advice(@RequestBody List<Advice> advices) {
         return adviceService.advice(advices);
@@ -50,7 +58,7 @@ public class AdviceController {
         adviceService.generateAdvicePdfForQuery(response, queryId);
     }
     
-    @GetMapping("/advice-pdf/{query-id}")
+    @GetMapping("/send-advice-pdf/{query-id}")
     public void generateAndSendAdvicePdfForQuery(
             HttpServletRequest request,
             HttpServletResponse response,

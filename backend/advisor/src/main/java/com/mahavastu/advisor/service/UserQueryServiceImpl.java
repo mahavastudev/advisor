@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.mahavastu.advisor.entity.ClientEntity;
 import com.mahavastu.advisor.entity.MasterConcernEntity;
@@ -111,12 +112,17 @@ public class UserQueryServiceImpl implements UserQueryService
     }
 
     @Override
-    public String resolveQueryByQueryId(int userQueryId)
+    public String resolveQueryByQueryId(int userQueryId, String resolveText)
     {
+        if(StringUtils.isEmpty(resolveText))
+        {
+            return "Query cannot be marked as resolved if no resolution is provided.";
+        }
         try
         {
             UserQueryEntity userQueryEntity = userQueryRepository.getById(userQueryId);
             userQueryEntity.setActive(false);
+            userQueryEntity.setResolveText(resolveText);
             UserQueryEntity savedEntity = userQueryRepository.save(userQueryEntity);
             return String.format(
                     "Query related to site %s for concern %s, and Query id as %s is marked as resolved.",
