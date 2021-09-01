@@ -158,6 +158,7 @@ public final class Converter
                 userQueryEntity.getSite().getSiteId(),
                 userQueryEntity.getHoroId(),
                 getMasterConcernFromMasterConcernEntity(userQueryEntity.getMasterConcernEntity()),
+                userQueryEntity.isActive(),
                 userQueryEntity.getResolveText());
     }
 

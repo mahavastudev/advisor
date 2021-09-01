@@ -20,5 +20,6 @@ public class UserQuery {
     private Integer siteId;
     private Integer horoId;
     private MasterConcern masterConcern;
+    private boolean isActive;
     private String resolveText;
 }

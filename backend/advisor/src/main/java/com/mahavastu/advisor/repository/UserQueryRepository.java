@@ -15,4 +15,5 @@ public interface UserQueryRepository extends JpaRepository<UserQueryEntity, Inte
     List<UserQueryEntity> findByClientAndIsActive(@Param("cl_id") ClientEntity clientEntity, @Param("is_active") boolean isActive);
     List<UserQueryEntity> findByIsActive(@Param("is_active") boolean isActive);
     List<UserQueryEntity> findBySiteAndIsActive(@Param("site_id") SiteEntity siteEntity, @Param("is_active") boolean isActive);
+    List<UserQueryEntity> findBySite(@Param("site_id") SiteEntity siteEntity);
 }

@@ -106,7 +106,7 @@ public class UserQueryServiceImpl implements UserQueryService
     public List<UserQuery> getUserQueriesBySiteId(int siteId)
     {
         SiteEntity siteEntity = siteRepository.getById(siteId);
-        List<UserQueryEntity> userQueryEntities = userQueryRepository.findBySiteAndIsActive(siteEntity, true);
+        List<UserQueryEntity> userQueryEntities = userQueryRepository.findBySite(siteEntity);
         List<UserQuery> userQueries = Converter.getUserQueriesFromUserQueryEntities(userQueryEntities);
         return userQueries;
     }
