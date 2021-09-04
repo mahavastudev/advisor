@@ -6,12 +6,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.mahavastu.advisor.model.Advice;
 import com.mahavastu.advisor.model.Advisor;
-import com.mahavastu.advisor.model.Client;
 import com.mahavastu.advisor.model.LevelEnum;
 import com.mahavastu.advisor.model.RequestResult;
 
 public interface AdviceService {
-    RequestResult advice(List<Advice> advices);
+    RequestResult advice(List<Advice> advices, Integer advisorId);
     List<Advice> getAdvices(Integer queryId, Integer siteId, LevelEnum level);
     void generateAdvicePdfForQuery(HttpServletResponse response, Integer queryId);
     void generateAndSendAdvicePdfForQuery(HttpServletResponse response, Integer queryId);

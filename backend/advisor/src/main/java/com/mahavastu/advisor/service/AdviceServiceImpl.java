@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -65,12 +66,17 @@ public class AdviceServiceImpl implements AdviceService
     private AdvisorRepository advisorRepository;
 
     @Override
-    public RequestResult advice(List<Advice> advices)
+    public RequestResult advice(List<Advice> advices, Integer advisorId)
     {
         String message = "";
+        Optional<AdvisorEntity> advisorEntityOptional = advisorId == null ? null : advisorRepository.findById(advisorId);
         if (CollectionUtils.isEmpty(advices) || advices.iterator().next() == null)
         {
-            message = "Advice could not be updated! Please try again!";
+            message = "Advice is not be updated! Please try again!";
+        }
+        else if(advisorEntityOptional == null || !advisorEntityOptional.isPresent())
+        {
+            message = "Advice could not be updated! Advisor not found. Please try again!";
         }
         else
         {
@@ -78,7 +84,7 @@ public class AdviceServiceImpl implements AdviceService
             UserQueryEntity userQueryEntity = userQueryRepository.getById(firstAdvice.getUserQuery().getQueryId());
             SiteEntity siteEntity = siteRepository.getById(firstAdvice.getUserQuery().getSiteId());
             ClientEntity clientEntity = clientRepository.getById(firstAdvice.getUserQuery().getClient().getClientId());
-            AdvisorEntity advisorEntity = firstAdvice.getAdvisor() == null ? null : advisorRepository.getById(firstAdvice.getAdvisor().getAdvisorId());
+            AdvisorEntity advisorEntity = advisorId == null ? null : advisorRepository.getById(firstAdvice.getAdvisor().getAdvisorId());
             
             List<AdviceEntity> adviceEntities = Converter
                     .getAdviceEntitiesFromAdvices(advices, userQueryEntity, siteEntity, clientEntity, advisorEntity);

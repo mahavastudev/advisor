@@ -12,6 +12,7 @@ import com.mahavastu.advisor.entity.ClientImageMasterEntity;
 import com.mahavastu.advisor.entity.OccupationEntity;
 import com.mahavastu.advisor.entity.converter.Converter;
 import com.mahavastu.advisor.model.Client;
+import com.mahavastu.advisor.model.LoginDetails;
 import com.mahavastu.advisor.model.Occupation;
 import com.mahavastu.advisor.repository.ClientImageMasterRepository;
 import com.mahavastu.advisor.repository.ClientRepository;
@@ -27,15 +28,12 @@ public class ClientServiceImpl implements ClientService
     @Autowired
     private OccupationRepository occupationRepository;
 
-    @Autowired
-    private ClientImageMasterRepository clientImageMasterRepository;
-
     @Override
-    public Client login(Client client)
+    public Client login(LoginDetails client)
     {
         if (client == null)
             return null;
-        ClientEntity clientEntity = clientRepository.getById(client.getClientId());
+        ClientEntity clientEntity = clientRepository.findByClientEmailOrClientMobile(client.getClientId(), client.getClientId());
         if (clientEntity != null && clientEntity.getPassword().equals(client.getPassword()))
         {
             return Converter.getClientFromClientEntity(clientEntity);

@@ -23,32 +23,38 @@ import com.mahavastu.advisor.model.RequestResult;
 import com.mahavastu.advisor.service.AdviceService;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200", "http://horo3.mahavastu.com:8080"})
+@CrossOrigin(origins = {
+        "http://localhost:4200", "http://horo3.mahavastu.com:8080"
+})
 @RequestMapping("advice")
-public class AdviceController {
+public class AdviceController
+{
 
     @Autowired
     private AdviceService adviceService;
 
     @PostMapping("/login")
     @ResponseBody
-    public Advisor login(@RequestBody Advisor advisor) {
+    public Advisor login(@RequestBody Advisor advisor)
+    {
         return adviceService.login(advisor);
     }
-    
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public RequestResult advice(@RequestBody List<Advice> advices) {
-        return adviceService.advice(advices);
+
+    @PostMapping(value = "/{advisor-id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public RequestResult advice(@RequestBody List<Advice> advices, @PathVariable("advisor-id") Integer advisorId)
+    {
+        return adviceService.advice(advices, advisorId);
     }
 
     @GetMapping("/{query-id}/{site-id}/{level}")
-    public List<Advice> getAdvices(@PathVariable("query-id") Integer queryId,
-                                   @PathVariable("site-id") Integer siteId,
-                                   @PathVariable("level") LevelEnum level)
+    public List<Advice> getAdvices(
+            @PathVariable("query-id") Integer queryId,
+            @PathVariable("site-id") Integer siteId,
+            @PathVariable("level") LevelEnum level)
     {
         return adviceService.getAdvices(queryId, siteId, level);
     }
-    
+
     @GetMapping("/advice-pdf/{query-id}")
     public void generateAdvicePdfForQuery(
             HttpServletRequest request,
@@ -57,7 +63,7 @@ public class AdviceController {
     {
         adviceService.generateAdvicePdfForQuery(response, queryId);
     }
-    
+
     @GetMapping("/send-advice-pdf/{query-id}")
     public void generateAndSendAdvicePdfForQuery(
             HttpServletRequest request,

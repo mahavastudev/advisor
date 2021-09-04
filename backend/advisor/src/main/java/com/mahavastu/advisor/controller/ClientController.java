@@ -1,6 +1,7 @@
 package com.mahavastu.advisor.controller;
 
 import com.mahavastu.advisor.model.Client;
+import com.mahavastu.advisor.model.LoginDetails;
 import com.mahavastu.advisor.model.Occupation;
 import com.mahavastu.advisor.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class ClientController {
 
     @PostMapping("/login")
     @ResponseBody
-    public Client login(@RequestBody Client client) {
+    public Client login(@RequestBody LoginDetails client) {
         return clientService.login(client);
     }
 
