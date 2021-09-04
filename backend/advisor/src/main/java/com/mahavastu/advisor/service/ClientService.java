@@ -11,4 +11,6 @@ public interface ClientService {
     Client addClient(Client client);
 
     List<Occupation> getAllOccupations();
+
+    Client updateClient(Client client);
 }

@@ -162,7 +162,7 @@ public final class Converter
                 getMasterConcernFromMasterConcernEntity(userQueryEntity.getMasterConcernEntity()),
                 userQueryEntity.isActive(),
                 userQueryEntity.getResolveText(),
-                null);
+                getAdvisorFromAdvisorEntity(userQueryEntity.getAdvisorEntity()));
     }
 
     public static MasterConcern getMasterConcernFromMasterConcernEntity(MasterConcernEntity masterConcernEntity)
@@ -294,7 +294,8 @@ public final class Converter
             Advice advice,
             UserQueryEntity userQueryEntity,
             SiteEntity siteEntity,
-            ClientEntity clientEntity)
+            ClientEntity clientEntity,
+            AdvisorEntity advisorEntity)
     {
         if (advice == null || userQueryEntity == null || siteEntity == null || clientEntity == null)
         {
@@ -330,14 +331,16 @@ public final class Converter
                 advice.getOuterDevta(),
                 advice.getConcerns(),
                 advice.getIntuitiveDiagnosis(),
-                advice.getInner12Devta());
+                advice.getInner12Devta(),
+                advisorEntity);
     }
 
     public static List<AdviceEntity> getAdviceEntitiesFromAdvices(
             List<Advice> advices,
             UserQueryEntity userQueryEntity,
             SiteEntity siteEntity,
-            ClientEntity clientEntity)
+            ClientEntity clientEntity,
+            AdvisorEntity advisorEntity)
     {
         List<AdviceEntity> adviceEntities = new ArrayList<>();
         if (CollectionUtils.isEmpty(advices))
@@ -345,7 +348,7 @@ public final class Converter
             return adviceEntities;
         }
         advices.stream().forEach(advice -> {
-            AdviceEntity adviceEntity = getAdviceEntityFromAdvice(advice, userQueryEntity, siteEntity, clientEntity);
+            AdviceEntity adviceEntity = getAdviceEntityFromAdvice(advice, userQueryEntity, siteEntity, clientEntity, advisorEntity);
             if (adviceEntity != null)
             {
                 adviceEntities.add(adviceEntity);
@@ -410,7 +413,8 @@ public final class Converter
                 adviceEntity.getOuterDevta(),
                 adviceEntity.getConcerns(),
                 adviceEntity.getIntuitiveDiagnosis(),
-                adviceEntity.getInner12Devta());
+                adviceEntity.getInner12Devta(),
+                getAdvisorFromAdvisorEntity(adviceEntity.getAdvisorEntity()));
     }
 
     public static Advisor getAdvisorFromAdvisorEntity(AdvisorEntity advisorEntity)

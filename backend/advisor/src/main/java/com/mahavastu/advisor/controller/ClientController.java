@@ -27,6 +27,12 @@ public class ClientController {
     public Client addClient(@RequestBody Client client) {
         return clientService.addClient(client);
     }
+    
+    @PutMapping
+    @ResponseBody
+    public Client updateClient(@RequestBody Client client) {
+        return clientService.updateClient(client);
+    }
 
     @GetMapping("/occupations")
     @ResponseBody

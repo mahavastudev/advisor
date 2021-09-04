@@ -22,10 +22,10 @@ public class ClientEntity
     @Column(name = "cl_name")
     private String clientName;
 
-    @Column(name = "cl_mobile")
+    @Column(name = "cl_mobile", unique = true)
     private String clientMobile;
 
-    @Column(name = "cl_email")
+    @Column(name = "cl_email", unique = true)
     private String clientEmail;
 
     @OneToOne

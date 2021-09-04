@@ -2,7 +2,11 @@ package com.mahavastu.advisor.entity.advice;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.mahavastu.advisor.entity.AdvisorEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -92,6 +96,10 @@ public class AdviceEntity
 
     // LEVEL_1_K_DEVTA_1
     private String inner12Devta;
+    
+    @OneToOne
+    @JoinColumn(name = "advisor_id")
+    private AdvisorEntity advisorEntity;
 
 
 }

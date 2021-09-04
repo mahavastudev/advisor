@@ -6,8 +6,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,9 +29,10 @@ import com.mahavastu.advisor.entity.advice.AdviceEntity;
 import com.mahavastu.advisor.entity.converter.Converter;
 import com.mahavastu.advisor.model.Advice;
 import com.mahavastu.advisor.model.Advisor;
-import com.mahavastu.advisor.model.Client;
 import com.mahavastu.advisor.model.LevelEnum;
 import com.mahavastu.advisor.model.RequestResult;
+import com.mahavastu.advisor.model.Site;
+import com.mahavastu.advisor.model.UserQuery;
 import com.mahavastu.advisor.repository.AdviceRepository;
 import com.mahavastu.advisor.repository.AdvisorAppMetadataRepositroy;
 import com.mahavastu.advisor.repository.AdvisorRepository;
@@ -38,6 +40,7 @@ import com.mahavastu.advisor.repository.ClientRepository;
 import com.mahavastu.advisor.repository.SiteRepository;
 import com.mahavastu.advisor.repository.UserQueryRepository;
 import com.mahavastu.advisor.utility.FileUtility;
+import com.mahavastu.advisor.utility.PdfFillUtility;
 
 @Service
 public class AdviceServiceImpl implements AdviceService
@@ -57,7 +60,7 @@ public class AdviceServiceImpl implements AdviceService
 
     @Autowired
     private AdvisorAppMetadataRepositroy advisorAppMetadataRepositroy;
-    
+
     @Autowired
     private AdvisorRepository advisorRepository;
 
@@ -75,9 +78,10 @@ public class AdviceServiceImpl implements AdviceService
             UserQueryEntity userQueryEntity = userQueryRepository.getById(firstAdvice.getUserQuery().getQueryId());
             SiteEntity siteEntity = siteRepository.getById(firstAdvice.getUserQuery().getSiteId());
             ClientEntity clientEntity = clientRepository.getById(firstAdvice.getUserQuery().getClient().getClientId());
-
+            AdvisorEntity advisorEntity = firstAdvice.getAdvisor() == null ? null : advisorRepository.getById(firstAdvice.getAdvisor().getAdvisorId());
+            
             List<AdviceEntity> adviceEntities = Converter
-                    .getAdviceEntitiesFromAdvices(advices, userQueryEntity, siteEntity, clientEntity);
+                    .getAdviceEntitiesFromAdvices(advices, userQueryEntity, siteEntity, clientEntity, advisorEntity);
 
             if (!CollectionUtils.isEmpty(adviceEntities))
             {
@@ -128,35 +132,27 @@ public class AdviceServiceImpl implements AdviceService
     private String createPdfAndGetFile(List<Advice> advices, Integer queryId)
     {
         String reportFilePath = copyTemplatesForRequest(advices);
-       
+
         UserQueryEntity userQueryEntity = userQueryRepository.getById(queryId);
 
+        UserQuery userQuery = Converter.getUserQueryFromUserQueryEntity(userQueryEntity);
+        Site site = Converter.getSiteFromSiteEntity(userQueryEntity.getSite());
+        String reportGeneratedPath = reportFilePath.replace(".pdf", "-generated.pdf");
         try
         {
             PdfReader reader = new PdfReader(reportFilePath);
 
-            PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(reportFilePath));
+            PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(reportGeneratedPath));
             AcroFields form = stamper.getAcroFields();
 
-            String name = userQueryEntity.getClient().getClientName();
-            form.setField("#QUERY_OWNER_NAME#", name);
+            // Client Info
+            PdfFillUtility.fillClientInfo(userQuery, form);
 
-            // General
-            fillGeneralDetails(userQueryEntity, form);
+            // Site Info
+            PdfFillUtility.fillSiteInfo(site, form);
 
             // Advice
-            int row = 1;
-            for (int adviceIndex = 0; adviceIndex < advices.size(); adviceIndex++)
-            {
-                Advice advice = advices.get(adviceIndex);
-                form.setField("#L" + row + "C5#", advice.getLevel().toString());
-                form.setField("#L" + row + "C2#", advice.getZone());
-                form.setField("#L" + row + "C3#", advice.getEntrance());
-                form.setField("#L" + row + "C4#", advice.getEvaluation());
-                form.setField("#L" + row + "C1#", advice.getSuggestions());
-                form.setField("#L" + row + "C6#", advice.getTypeOfEntrance());
-                row += 2;
-            }
+            fillAllAdvices(advices, form);
 
             stamper.setFormFlattening(true);
             stamper.close();
@@ -173,19 +169,39 @@ public class AdviceServiceImpl implements AdviceService
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return reportFilePath;
+        return reportGeneratedPath;
 
     }
 
-    private void fillGeneralDetails(UserQueryEntity userQueryEntity, AcroFields form)
-            throws IOException,
-            DocumentException
+    private void fillAllAdvices(List<Advice> advices, AcroFields form)
     {
-        String siteDetails = String
-                .format("%s - %s", userQueryEntity.getSite().getSiteId(), userQueryEntity.getSite().getSiteName());
-        form.setField("#QUERY_SITE_DETAILS#", siteDetails);
+        // Intuitive Audit
+        List<Advice> intuitiveAudits = advices.stream().filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_K_INTUITIVE))
+                .collect(Collectors.toList());
+        PdfFillUtility.fillIntuitiveAudit(intuitiveAudits, form);
 
-        form.setField("#QUERY_CONCERN#", userQueryEntity.getMasterConcernEntity().getConcernName());
+        // Entrance Audit
+        List<Advice> entranceAudits = advices.stream().filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_A_ENTRANCE))
+                .collect(Collectors.toList());
+        PdfFillUtility.fillEntranceAudit(entranceAudits, form);
+
+        // Prakriti Audit
+        List<Advice> prakritiAudits = advices.stream()
+                .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_B_PRAKRITI_OF_PERSON))
+                .collect(Collectors.toList());
+        PdfFillUtility.fillPrakritiAudit(prakritiAudits, form);
+
+        // Prakriti-Building Audit
+        List<Advice> prakritiBuildingAudits = advices.stream()
+                .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_B_PRAKRITI_BUILDING))
+                .collect(Collectors.toList());
+        PdfFillUtility.fillPrakritiBuildingAudit(prakritiBuildingAudits, form);
+
+        // Prakriti-Balancing Audit
+        List<Advice> prakritiBalancingAudits = advices.stream()
+                .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_B_SUGGESTION_FOR_PRAKRITI))
+                .collect(Collectors.toList());
+        PdfFillUtility.fillPrakritiBalancingAudit(prakritiBalancingAudits, form);
     }
 
     private String copyTemplatesForRequest(List<Advice> advices)
@@ -195,7 +211,7 @@ public class AdviceServiceImpl implements AdviceService
                 "%s/%s-%s",
                 templateFileAddress.substring(0, templateFileAddress.lastIndexOf("/")),
                 advices.iterator().next().getUserQuery().getQueryId(),
-                Calendar.getInstance().getTimeInMillis());
+                UUID.randomUUID().toString());
 
         File directory = new File(templateDestDirectory);
         if (!directory.exists())
@@ -235,7 +251,7 @@ public class AdviceServiceImpl implements AdviceService
         {
             return null;
         }
-            
+
         AdvisorEntity advisorEntity = advisorRepository.getById(advisor.getAdvisorId());
         if (advisorEntity != null && advisorEntity.getPassword().equals(advisor.getPassword()))
         {

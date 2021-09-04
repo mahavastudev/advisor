@@ -84,5 +84,7 @@ public class Advice
 
     // LEVEL_1_K_DEVTA_1
     private String inner12Devta;
+    
+    private Advisor advisor;
 
 }

@@ -44,20 +44,20 @@ public class ClientServiceImpl implements ClientService
     }
 
     @Override
-    public Client addClient(Client client) {
+    public Client addClient(Client client)
+    {
+        ClientEntity existingClientEntity = clientRepository
+                .findByClientEmailOrClientMobile(client.getClientEmail(), client.getClientMobile());
+        if (existingClientEntity != null)
+        {
+            return null;
+        }
         OccupationEntity occupationEntity = occupationRepository.getById(client.getOccupation().getOccupationId());
         System.out.println(occupationEntity);
         ClientEntity clientEntity = Converter.getClientEntityFromClient(client, occupationEntity);
-        if(clientEntity != null) {
-            if(StringUtils.isEmpty(clientEntity.getPassword()))
-            {
-                Optional<ClientEntity> existingEntityOptional = clientRepository.findById(clientEntity.getClientId());
-                if(existingEntityOptional.isPresent())
-                {
-                    clientEntity.setPassword(existingEntityOptional.get().getPassword());
-                }
-                
-            }
+        if (clientEntity != null)
+        {
+
             ClientEntity savedEntity = clientRepository.save(clientEntity);
             System.out.println("saved: " + savedEntity);
             return Converter.getClientFromClientEntity(savedEntity);
@@ -70,5 +70,29 @@ public class ClientServiceImpl implements ClientService
     {
         List<OccupationEntity> occupationEntities = occupationRepository.findAll();
         return Converter.getOccupationsFromOccupationEntities(occupationEntities);
+    }
+
+    @Override
+    public Client updateClient(Client client)
+    {
+        ClientEntity existingClientEntity = clientRepository.getById(client.getClientId());
+        if (existingClientEntity == null)
+        {
+            return null;
+        }
+        OccupationEntity occupationEntity = occupationRepository.getById(client.getOccupation().getOccupationId());
+        System.out.println(occupationEntity);
+        ClientEntity clientEntity = Converter.getClientEntityFromClient(client, occupationEntity);
+        if (clientEntity != null)
+        {
+            if(StringUtils.isEmpty(client.getPassword()))
+            {
+                clientEntity.setPassword(existingClientEntity.getPassword());
+            }
+            ClientEntity savedEntity = clientRepository.save(clientEntity);
+            System.out.println("saved: " + savedEntity);
+            return Converter.getClientFromClientEntity(savedEntity);
+        }
+        return null;
     }
 }
