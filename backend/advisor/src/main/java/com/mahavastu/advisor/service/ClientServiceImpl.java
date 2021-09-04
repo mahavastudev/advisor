@@ -12,7 +12,7 @@ import com.mahavastu.advisor.entity.ClientImageMasterEntity;
 import com.mahavastu.advisor.entity.OccupationEntity;
 import com.mahavastu.advisor.entity.converter.Converter;
 import com.mahavastu.advisor.model.Client;
-import com.mahavastu.advisor.model.LoginDetails;
+import com.mahavastu.advisor.model.ClientLoginDetails;
 import com.mahavastu.advisor.model.Occupation;
 import com.mahavastu.advisor.repository.ClientImageMasterRepository;
 import com.mahavastu.advisor.repository.ClientRepository;
@@ -29,7 +29,7 @@ public class ClientServiceImpl implements ClientService
     private OccupationRepository occupationRepository;
 
     @Override
-    public Client login(LoginDetails client)
+    public Client login(ClientLoginDetails client)
     {
         if (client == null)
             return null;
@@ -44,21 +44,29 @@ public class ClientServiceImpl implements ClientService
     @Override
     public Client addClient(Client client)
     {
-        ClientEntity existingClientEntity = clientRepository
-                .findByClientEmailOrClientMobile(client.getClientEmail(), client.getClientMobile());
-        if (existingClientEntity != null)
+        try
         {
+            ClientEntity existingClientEntity = clientRepository
+                    .findByClientEmailOrClientMobile(client.getClientEmail(), client.getClientMobile());
+            if (existingClientEntity != null)
+            {
+                return null;
+            }
+            OccupationEntity occupationEntity = occupationRepository.getById(client.getOccupation().getOccupationId());
+            System.out.println(occupationEntity);
+            ClientEntity clientEntity = Converter.getClientEntityFromClient(client, occupationEntity);
+            if (clientEntity != null)
+            {
+
+                ClientEntity savedEntity = clientRepository.save(clientEntity);
+                System.out.println("saved: " + savedEntity);
+                return Converter.getClientFromClientEntity(savedEntity);
+            }
             return null;
         }
-        OccupationEntity occupationEntity = occupationRepository.getById(client.getOccupation().getOccupationId());
-        System.out.println(occupationEntity);
-        ClientEntity clientEntity = Converter.getClientEntityFromClient(client, occupationEntity);
-        if (clientEntity != null)
+        catch(Exception e)
         {
-
-            ClientEntity savedEntity = clientRepository.save(clientEntity);
-            System.out.println("saved: " + savedEntity);
-            return Converter.getClientFromClientEntity(savedEntity);
+            e.printStackTrace();
         }
         return null;
     }

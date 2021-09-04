@@ -45,9 +45,14 @@ public class PdfFillUtility
         entranceAudits.stream().forEach(advice -> {
             try
             {
-                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_" + "ENTRANCE_TYPE#", advice.getTypeOfEntrance());
-                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_" + "EFFECTS#", advice.getEvaluation());
-                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_" + "MAHAVASTU_ADVICE#", advice.getSuggestions());
+                // #LEVEL_1_A_ENTRANCE_NE_ENTRANCE_TYPE#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_ENTRANCE_TYPE#", advice.getTypeOfEntrance());
+                // LEVEL_1_A_ENTRANCE_NE_EFFECTS#
+                // form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_EFFECTS#", advice.getEvaluation());
+                form.setField(advice.getLevel() + "_" + advice.getZone() + "_EFFECTS#", advice.getEvaluation());
+                // LEVEL_1_A_ENTRANCE_NE_MAHAVASTU_ADVICE#
+                // form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_MAHAVASTU_ADVICE#", advice.getSuggestions());
+                form.setField(advice.getLevel() + "_" + advice.getZone() + "_MAHAVASTU_ADVICE#", advice.getSuggestions());
             }
             catch (IOException e)
             {
@@ -84,9 +89,10 @@ public class PdfFillUtility
         prakritiBuildingAudits.stream().forEach(advice -> {
             try
             {
-                // #LEVEL_1_B_SUGGESTION_FOR_PRAKRITI_NE_MOTIVATION_PERSON_ACTIVITY#
-                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_" + "ACTIVITY#", advice.getActivity());
-                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_" + "ADVICE#", advice.getSuggestions());
+                // #LEVEL_1_B_PRAKRITI_BUILDING_NE_BUILDING_ACTIVITY#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_BUILDING_ACTIVITY#", advice.getBuildingActivity());
+                // #LEVEL_1_B_PRAKRITI_BUILDING_NE_SUGGESTION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_SUGGESTION#", advice.getSuggestions());
             }
             catch (IOException e)
             {
@@ -146,6 +152,271 @@ public class PdfFillUtility
                 e.printStackTrace();
             }
         });
+    }
+
+    public static void fillDishaBalBalancingAudit(List<Advice> dishaBalAudits, AcroFields form)
+    {
+        dishaBalAudits.stream().forEach(advice -> {
+            try
+            {
+                // #LEVEL_1_C_DISHA_BAL_NE_DISHABAL#
+                String dishaBal = advice.getDishabal() == null ? "" : advice.getDishabal().toString();
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_DISHABAL#", dishaBal);
+                // #LEVEL_1_C_DISHA_BAL_NE_STATUS#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_STATUS#", advice.getStatus());
+                // #LEVEL_1_C_DISHA_BAL_NE_EVALUATION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_EVALUATION#", advice.getEvaluation());
+                // #LEVEL_1_C_DISHA_BAL_NE_SUGGESTION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_SUGGESTION#", advice.getSuggestions());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            catch (DocumentException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void fillFiveElementsAudit(List<Advice> fiveAudits, AcroFields form)
+    {
+        // #LEVEL_1_D_FIVE_ELEMENTS_NNE_SUGGESTION#  
+        fiveAudits.stream().forEach(advice -> {
+            try
+            {
+                // #LEVEL_1_D_FIVE_ELEMENTS_NE_FIVE_ELEMENT_OBJECT#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_FIVE_ELEMENT_OBJECT#", advice.getFiveElements());
+                // #LEVEL_1_C_DISHA_BAL_NE_EVALUATION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_EVALUATION#", advice.getEvaluation());
+                // #LEVEL_1_C_DISHA_BAL_NE_SUGGESTION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_SUGGESTION#", advice.getSuggestions());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            catch (DocumentException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void fillActivityAudit(List<Advice> activityAudits, AcroFields form)
+    {
+        activityAudits.stream().forEach(advice -> {
+            try
+            {
+                // #LEVEL_1_E_ACTIVITY_NE_ACTIVITY#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_ACTIVITY#", advice.getActivity());
+                // #LEVEL_1_E_ACTIVITY_NE_EVALUATION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_EVALUATION#", advice.getEvaluation());
+                // #LEVEL_1_E_ACTIVITY_NE_SUGGESTION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_SUGGESTION#", advice.getSuggestions());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            catch (DocumentException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void fillUtilityAudit(List<Advice> utilityAudits, AcroFields form)
+    {
+        utilityAudits.stream().forEach(advice -> {
+            try
+            {
+                // #LEVEL_1_F_UTILITY_NE_ACTIVITY#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_ACTIVITY#", advice.getUtility());
+                // #LEVEL_1_F_UTILITY_NE_EVALUATION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_EVALUATION#", advice.getEvaluation());
+                // #LEVEL_1_F_UTILITY_NE_SUGGESTION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_SUGGESTION#", advice.getSuggestions());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            catch (DocumentException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void fillObjectAudit(List<Advice> objectAudits, AcroFields form)
+    {
+        objectAudits.stream().forEach(advice -> {
+            try
+            {
+                // #LEVEL_1_G_OBJECTS_NE_OBJECT#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_OBJECT#", advice.getObjects());
+                // #LEVEL_1_G_OBJECTS_NE_EVALUATION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_EVALUATION#", advice.getEvaluation());
+                // #LEVEL_1_G_OBJECTS_NE_SUGGESTION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_SUGGESTION#", advice.getSuggestions());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            catch (DocumentException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void fillRemediesAudit(List<Advice> remediesAudits, AcroFields form)
+    {
+        remediesAudits.stream().forEach(advice -> {
+            try
+            {
+                // #LEVEL_1_G_OBJECTS_NE_EVALUATION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_EVALUATION#", advice.getEvaluation());
+                // #LEVEL_1_H_REMEDIES_NE_MV_REMEDIES#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_MV_REMEDIES#", advice.getMvRemedies());
+                // #LEVEL_1_H_REMEDIES_NE_MV_SUGGESTIONS#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_MV_SUGGESTIONS#", advice.getSuggestions());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            catch (DocumentException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void fillAstroOneAudit(List<Advice> astroOneAudits, AcroFields form)
+    {
+        astroOneAudits.stream().forEach(advice -> {
+            try
+            {
+                String zone = advice.getZone().toUpperCase().replaceAll(" ", "_");
+                
+                // #LEVEL_1_I_ASTRO_AUDIT_1_POWER_OF_MANIFESTATION_CUSP_SIGN#
+                form.setField("#" + advice.getLevel() + "_" + zone + "_CUSP_SIGN#", advice.getSign());
+                // #LEVEL_1_I_ASTRO_AUDIT_1_POWER_OF_MANIFESTATION_INFLUENCE#
+                form.setField("#" + advice.getLevel() + "_" + zone + "_INFLUENCE#", advice.getInfluence());
+                // #LEVEL_1_I_ASTRO_AUDIT_1_POWER_OF_MANIFESTATION_BEST_APPROACH#
+                form.setField("#" + advice.getLevel() + "_" + zone + "_BEST_APPROACH#", advice.getSuggestions());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            catch (DocumentException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void fillAstroTwoAudit(List<Advice> astroTwoAudits, AcroFields form)
+    {
+        astroTwoAudits.stream().forEach(advice -> {
+            try
+            {
+                String zone = advice.getZone().toUpperCase().replaceAll(" ", "_");
+                
+                // #LEVEL_1_I_ASTRO_AUDIT_2_VENUS_CUSP_SIGN#
+                form.setField("#" + advice.getLevel() + "_" + zone + "_CUSP_SIGN#", advice.getSign());
+                // #LEVEL_1_I_ASTRO_AUDIT_1_POWER_OF_MANIFESTATION_INFLUENCE#
+                form.setField("#" + advice.getLevel() + "_" + zone + "_MV_REMEDIES#", advice.getInfluence());
+                // #LEVEL_1_I_ASTRO_AUDIT_1_POWER_OF_MANIFESTATION_BEST_APPROACH#
+                form.setField("#" + advice.getLevel() + "_" + zone + "_SUGGESTIONS#", advice.getSuggestions());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            catch (DocumentException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void fillAstroRemediesThreeAudit(List<Advice> astroRemediesThreeAudits, AcroFields form)
+    {
+        astroRemediesThreeAudits.stream().forEach(advice -> {
+            try
+            {
+                String zone = advice.getZone().toUpperCase().replaceAll(" ", "_");
+                
+                // #LEVEL_1_I_ASTRO_AUDIT_3_VISION_MANIFESTATION_SIGN#
+                form.setField("#" + advice.getLevel() + "_" + zone + "_SIGN#", advice.getSign());
+                // #LEVEL_1_I_ASTRO_AUDIT_3_VISION_MANIFESTATION_MV_ZONE#
+                form.setField("#" + advice.getLevel() + "_" + zone + "_MV_ZONE#", advice.getMvDirections());
+                // #LEVEL_1_I_ASTRO_AUDIT_3_VISION_MANIFESTATION_ACTIVITY#
+                form.setField("#" + advice.getLevel() + "_" + zone + "_ACTIVITY#", advice.getActivity());
+                // #LEVEL_1_I_ASTRO_AUDIT_3_VISION_MANIFESTATION_UTILITY#
+                form.setField("#" + advice.getLevel() + "_" + zone + "_UTILITY#", advice.getUtility());
+                // #LEVEL_1_I_ASTRO_AUDIT_3_VISION_MANIFESTATION_EVALUATION#
+                form.setField("#" + advice.getLevel() + "_" + zone + "_EVALUATION#", advice.getEvaluation());
+                // #LEVEL_1_I_ASTRO_AUDIT_3_VISION_MANIFESTATION_SUGGESTION#
+                form.setField("#" + advice.getLevel() + "_" + zone + "_SUGGESTION#", advice.getSuggestions());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            catch (DocumentException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void fillMarmaAudit(List<Advice> marmaAudits, AcroFields form)
+    {
+        marmaAudits.stream().forEach(advice -> {
+            try
+            {
+                // #LEVEL_1_J_MARMA_NE_MARMA#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_MARMA#", advice.getMarma());
+                // #LEVEL_1_G_OBJECTS_NE_EVALUATION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_EVALUATION#", advice.getEvaluation());
+                // #LEVEL_1_G_OBJECTS_NE_SUGGESTION#
+                form.setField("#" + advice.getLevel() + "_" + advice.getZone() + "_SUGGESTION#", advice.getSuggestions());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            catch (DocumentException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void fillGenericDetails(UserQuery userQuery, Site site, AcroFields form)
+    {
+        try
+        {
+            if(userQuery != null && site != null)
+            {
+                form.setField("#CLIENT_SITE#", String.format("%s - %s - %s", userQuery.getClient().getClientName(), site.getSiteName(), userQuery.getMasterConcern().getConcernName()));
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        catch (DocumentException e)
+        {
+            e.printStackTrace();
+        }
     }
 
 }

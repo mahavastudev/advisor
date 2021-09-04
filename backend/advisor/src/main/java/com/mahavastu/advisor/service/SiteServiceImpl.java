@@ -12,6 +12,7 @@ import com.mahavastu.advisor.repository.SiteTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -78,6 +79,8 @@ public class SiteServiceImpl implements SiteService{
 
     @Override
     public List<Site> getAllSites() {
-        return Converter.getSitesFromSiteEntities(siteRepository.findAll());
+        List<Site> sitesFromSiteEntities = Converter.getSitesFromSiteEntities(siteRepository.findAll());
+        Collections.sort(sitesFromSiteEntities, (s1, s2) -> s1.getSiteName().compareTo(s2.getSiteName()));
+        return sitesFromSiteEntities;
     }
 }

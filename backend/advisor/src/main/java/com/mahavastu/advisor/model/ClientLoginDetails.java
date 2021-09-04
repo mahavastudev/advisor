@@ -11,7 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class LoginDetails
+public class ClientLoginDetails
 {
     private String clientId;
     private String password;

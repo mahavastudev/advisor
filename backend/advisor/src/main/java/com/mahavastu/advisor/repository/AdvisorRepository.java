@@ -6,5 +6,5 @@ import com.mahavastu.advisor.entity.AdvisorEntity;
 
 public interface AdvisorRepository extends JpaRepository<AdvisorEntity, Integer>
 {
-
+    AdvisorEntity findByAdvisorEmailOrAdvisorMobile(String email, String mobile);
 }

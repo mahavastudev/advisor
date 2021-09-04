@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mahavastu.advisor.model.Advice;
 import com.mahavastu.advisor.model.Advisor;
+import com.mahavastu.advisor.model.AdvisorLoginDetails;
 import com.mahavastu.advisor.model.LevelEnum;
 import com.mahavastu.advisor.model.RequestResult;
 import com.mahavastu.advisor.service.AdviceService;
@@ -35,9 +36,9 @@ public class AdviceController
 
     @PostMapping("/login")
     @ResponseBody
-    public Advisor login(@RequestBody Advisor advisor)
+    public Advisor login(@RequestBody AdvisorLoginDetails advisorLoginDetails)
     {
-        return adviceService.login(advisor);
+        return adviceService.login(advisorLoginDetails);
     }
 
     @PostMapping(value = "/{advisor-id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
