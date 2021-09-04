@@ -2,6 +2,7 @@ package com.mahavastu.advisor.service;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,9 +103,11 @@ public class UserQueryServiceImpl implements UserQueryService
     }
 
     @Override
-    public List<UserQuery> getAllQueries()
+    public List<UserQuery> getAllActiveQueries()
     {
-        return Converter.getUserQueriesFromUserQueryEntities(userQueryRepository.findByIsActive(true));
+        List<UserQuery> userQueriesFromUserQueryEntities = Converter.getUserQueriesFromUserQueryEntities(userQueryRepository.findByIsActive(true));
+        Collections.sort(userQueriesFromUserQueryEntities, (q1, q2) -> q2.getQueryUpdateDatetime().compareTo(q1.getQueryUpdateDatetime()));
+        return userQueriesFromUserQueryEntities;
     }
 
     @Override

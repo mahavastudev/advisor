@@ -33,7 +33,7 @@ public class UserQueryController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<UserQuery> getAllQueries() {
-        return userQueryService.getAllQueries();
+        return userQueryService.getAllActiveQueries();
     }
 
     @GetMapping("/user-query-id/{user-query-id}")

@@ -8,7 +8,7 @@ public interface UserQueryService {
     UserQuery addUserQuery(UserQuery userQuery);
     List<UserQuery> getUserQueriesByClientId(Integer clientId);
     UserQuery getQueryById(Integer userQueryId);
-    List<UserQuery> getAllQueries();
+    List<UserQuery> getAllActiveQueries();
     List<UserQuery> getUserQueriesBySiteId(int siteId);
     String resolveQueryByQueryId(int userQueryId, String resolveText, int advisorId);
 }
