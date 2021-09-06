@@ -100,7 +100,7 @@ public class AdviceServiceImpl implements AdviceService
                         firstSavedEntity.getSiteQueryCompositeKey().getUserQueryEntity().getClient().getClientName(),
                         firstSavedEntity.getSiteQueryCompositeKey().getSiteEntity().getSiteName()
                                 + " - "
-                                + firstSavedEntity.getSiteQueryCompositeKey().getSiteEntity().getSiteAddress());
+                                + firstSavedEntity.getSiteQueryCompositeKey().getSiteEntity().getAddressEntity().getSiteAddress());
             }
             else
             {

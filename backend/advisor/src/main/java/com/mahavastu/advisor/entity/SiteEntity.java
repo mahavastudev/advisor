@@ -1,8 +1,18 @@
 package com.mahavastu.advisor.entity;
 
-import lombok.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
-import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "mv_site")
@@ -11,30 +21,48 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class SiteEntity {
+public class SiteEntity
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer siteId;
     private String siteName;
-    private String siteAddress;
-    private String siteGeo;
+    
     @OneToOne
     @JoinColumn(name = "site_type_id")
     private SiteTypeEntity siteType;
     private Integer siteMapId;
+
     @OneToOne
     @JoinColumn(name = "cl_id")
     private ClientEntity client;
 
     private String conditionType;
 
-    public SiteEntity(String siteName, String siteAddress, String siteGeo, SiteTypeEntity siteType, Integer siteMapId, ClientEntity client, String conditionType) {
+    private String plotArea;
+    private String coveredArea;
+    
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private AddressEntity addressEntity;
+
+    public SiteEntity(
+            String siteName,
+            SiteTypeEntity siteType,
+            Integer siteMapId,
+            ClientEntity client,
+            String conditionType,
+            String plotArea,
+            String coveredArea,
+            AddressEntity addressEntity)
+    {
         this.siteName = siteName;
-        this.siteAddress = siteAddress;
-        this.siteGeo = siteGeo;
         this.siteType = siteType;
         this.siteMapId = siteMapId;
         this.client = client;
         this.conditionType = conditionType;
+        this.plotArea = plotArea;
+        this.coveredArea = coveredArea;
+        this.addressEntity = addressEntity;
     }
 }

@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import org.springframework.util.CollectionUtils;
 
+import com.mahavastu.advisor.entity.AddressEntity;
 import com.mahavastu.advisor.entity.AdvisorEntity;
 import com.mahavastu.advisor.entity.ClientEntity;
 import com.mahavastu.advisor.entity.MasterConcernEntity;
@@ -15,6 +20,7 @@ import com.mahavastu.advisor.entity.SiteTypeEntity;
 import com.mahavastu.advisor.entity.UserQueryEntity;
 import com.mahavastu.advisor.entity.advice.AdviceEntity;
 import com.mahavastu.advisor.entity.advice.SiteQueryCompositeKey;
+import com.mahavastu.advisor.model.Address;
 import com.mahavastu.advisor.model.Advice;
 import com.mahavastu.advisor.model.Advisor;
 import com.mahavastu.advisor.model.Client;
@@ -32,23 +38,24 @@ public final class Converter
         // Empty Constructor as this is a Util Class.
     }
 
-    public static SiteEntity buildSiteEntityFromSite(Site site, ClientEntity clientEntity, SiteTypeEntity siteTypeEntity)
+    public static SiteEntity buildSiteEntityFromSite(Site site, ClientEntity clientEntity, SiteTypeEntity siteTypeEntity, AddressEntity addressEntity)
     {
-        if (site == null || clientEntity == null || siteTypeEntity == null)
+        if (site == null)
         {
             return null;
         }
         return new SiteEntity(
                 site.getSiteName(),
-                site.getSiteAddress(),
-                site.getSiteGeo(),
                 siteTypeEntity,
                 site.getSiteMapId(),
                 clientEntity,
-                site.getConditionType());
+                site.getConditionType(),
+                site.getPlotArea(),
+                site.getCoveredArea(),
+                addressEntity);
     }
 
-    public static SiteEntity getSiteEntityFromSite(Site site, ClientEntity clientEntity, SiteTypeEntity siteTypeEntity)
+    public static SiteEntity getSiteEntityFromSite(Site site, ClientEntity clientEntity, SiteTypeEntity siteTypeEntity, AddressEntity addressEntity)
     {
         if (site == null || clientEntity == null)
         {
@@ -57,12 +64,13 @@ public final class Converter
         return new SiteEntity(
                 site.getSiteId(),
                 site.getSiteName(),
-                site.getSiteAddress(),
-                site.getSiteGeo(),
-                siteTypeEntity,
+                siteTypeEntity,                
                 site.getSiteMapId(),
                 clientEntity,
-                site.getConditionType());
+                site.getConditionType(),
+                site.getPlotArea(),
+                site.getCoveredArea(),
+                addressEntity);
     }
 
     public static SiteTypeEntity getSiteTypeEntityFromSiteType(SiteType siteType)
@@ -114,13 +122,33 @@ public final class Converter
         return new Site(
                 siteEntity.getSiteId(),
                 siteEntity.getSiteName(),
-                siteEntity.getSiteAddress(),
-                siteEntity.getSiteGeo(),
                 getSiteTypeFromSiteTypeEntity(siteEntity.getSiteType()),
                 siteEntity.getSiteMapId(),
                 getClientFromClientEntity(siteEntity.getClient()),
-                siteEntity.getConditionType());
+                siteEntity.getConditionType(),
+                siteEntity.getPlotArea(),
+                siteEntity.getCoveredArea(),
+                getAddressFromAddressEntity(siteEntity.getAddressEntity()));
     }
+    
+
+    private static Address getAddressFromAddressEntity(AddressEntity addressEntity)
+    {
+        if (addressEntity == null)
+        {
+            return null;
+        }
+        return new Address(
+                addressEntity.getAddressId(),
+                addressEntity.getSiteAddress(),
+                addressEntity.getSiteGeo(),
+                addressEntity.getSubCity(),
+                addressEntity.getCity(),
+                addressEntity.getState(),
+                addressEntity.getCountry(),
+                addressEntity.getPinCode());
+    }
+    
 
     public static UserQueryEntity getUserQueryEntityFromUserQuery(
             UserQuery userQuery,
@@ -429,6 +457,21 @@ public final class Converter
                 advisorEntity.getAdvisorMobile(),
                 advisorEntity.getAdvisorEmail(),
                 null);
+    }
+
+    public static AddressEntity getAddressEntityFromAddress(Address address)
+    {
+        if (address == null)
+            return null;
+
+        return new AddressEntity(
+                address.getSiteAddress(),
+                address.getSiteGeo(),
+                address.getSubCity(),
+                address.getCity(),
+                address.getState(),
+                address.getCountry(),
+                address.getPinCode());
     }
 
 

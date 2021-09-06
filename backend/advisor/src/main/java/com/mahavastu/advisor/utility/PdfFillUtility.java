@@ -34,9 +34,9 @@ public class PdfFillUtility
     {
         form.setField("#SITE_INFO_CONSTRUCTION#", site.getSiteType().getSiteTypeName());
         form.setField("#SITE_INFO_TYPE#", site.getConditionType());
-        form.setField("#SITE_INFO_LOCATION#", site.getSiteAddress());
-        form.setField("#SITE_INFO_GOOGLE_LOCATION#", site.getSiteGeo());
-        form.setField("#SITE_INFO_ADDRESS#", site.getSiteAddress());
+        form.setField("#SITE_INFO_LOCATION#", site.getAddress().getSiteAddress());
+        form.setField("#SITE_INFO_GOOGLE_LOCATION#", site.getAddress().getSiteGeo());
+        form.setField("#SITE_INFO_ADDRESS#", site.getAddress().getSiteAddress());
         
     }
 

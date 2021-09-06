@@ -10,43 +10,52 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200", "http://horo3.mahavastu.com:8080"})
+@CrossOrigin(origins = {
+        "http://localhost:4200", "http://horo3.mahavastu.com:8080"
+})
 @RequestMapping("site")
-public class SiteController {
+public class SiteController
+{
 
     @Autowired
     private SiteService siteService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Site addSite(@RequestBody Site site) {
+    public Site addSite(@RequestBody Site site)
+    {
         return siteService.addSite(site);
     }
 
     @GetMapping
-    public List<Site> getAllSites() {
+    public List<Site> getAllSites()
+    {
         return siteService.getAllSites();
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Site updateSite(@RequestBody Site site) {
+    public Site updateSite(@RequestBody Site site)
+    {
         return siteService.updateSite(site);
     }
 
     @GetMapping("/{siteId}")
     @ResponseBody
-    public Site getSiteBySiteId(@PathVariable("siteId") Integer siteId) {
+    public Site getSiteBySiteId(@PathVariable("siteId") Integer siteId)
+    {
         return siteService.getSiteBySiteId(siteId);
     }
 
     @GetMapping("/client/{clientId}")
     @ResponseBody
-    public List<Site> getSitesByClientId(@PathVariable("clientId") Integer clientId) {
+    public List<Site> getSitesByClientId(@PathVariable("clientId") Integer clientId)
+    {
         return siteService.getSitesByClientId(clientId);
     }
 
     @GetMapping("/site-types")
     @ResponseBody
-    public List<SiteType> getSiteTypes() {
+    public List<SiteType> getSiteTypes()
+    {
         return siteService.getAllSiteTypes();
     }
 
