@@ -9,15 +9,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200", "http://horo3.mahavastu.com:8080"})
+@CrossOrigin(origins = {
+        "http://localhost:4200", "http://horo3.mahavastu.com:8080"
+})
 @RequestMapping("master-concerns")
-public class MasterConcernController {
+public class MasterConcernController
+{
 
     @Autowired
     private MasterConcernService masterConcernService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<MasterConcern> getAllMasterConcerns() {
+    public List<MasterConcern> getAllMasterConcerns()
+    {
         return masterConcernService.getAllMasterConcerns();
     }
 

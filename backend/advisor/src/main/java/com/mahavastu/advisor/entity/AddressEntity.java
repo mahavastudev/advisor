@@ -24,7 +24,7 @@ public class AddressEntity
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer addressId;
-    private String siteAddress;
+    private String address;
     
     private String siteGeo;
     private String subCity;
@@ -45,7 +45,7 @@ public class AddressEntity
             String pinCode)
     {
         super();
-        this.siteAddress = siteAddress;
+        this.address = siteAddress;
         this.siteGeo = siteGeo;
         this.subCity = subCity;
         this.city = city;

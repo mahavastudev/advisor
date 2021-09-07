@@ -5,12 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Site {
+public class Site
+{
     private Integer siteId;
     private String siteName;
     private SiteType siteType;

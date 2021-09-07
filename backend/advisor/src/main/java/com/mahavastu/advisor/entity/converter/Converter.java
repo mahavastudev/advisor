@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import org.springframework.util.CollectionUtils;
 
 import com.mahavastu.advisor.entity.AddressEntity;
@@ -93,7 +89,9 @@ public final class Converter
                         : clientEntity.getClientImageMasterEntity().getClientDisplayPic(),
                 clientEntity.getClientPOC(),
                 new Occupation(clientEntity.getOccupation().getOccupationId(), clientEntity.getOccupation().getOccupationName()),
-                null);
+                null,
+                clientEntity.getCreatedDate(),
+                getAddressFromAddressEntity(clientEntity.getAddressEntity()));
     }
 
     public static List<Site> getSitesFromSiteEntities(List<SiteEntity> siteEntities)
@@ -140,7 +138,7 @@ public final class Converter
         }
         return new Address(
                 addressEntity.getAddressId(),
-                addressEntity.getSiteAddress(),
+                addressEntity.getAddress(),
                 addressEntity.getSiteGeo(),
                 addressEntity.getSubCity(),
                 addressEntity.getCity(),
@@ -235,7 +233,9 @@ public final class Converter
                     null,
                     client.getClientPOC(),
                     occupationEntity,
-                    client.getPassword());
+                    client.getPassword(),
+                    client.getCreatedDate(),
+                    getAddressEntityFromAddress(client.getAddress()));
         }
         return new ClientEntity(
                 client.getClientName(),
@@ -465,7 +465,7 @@ public final class Converter
             return null;
 
         return new AddressEntity(
-                address.getSiteAddress(),
+                address.getAddress(),
                 address.getSiteGeo(),
                 address.getSubCity(),
                 address.getCity(),

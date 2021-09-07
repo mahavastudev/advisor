@@ -1,5 +1,7 @@
 package com.mahavastu.advisor.service;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,7 +59,7 @@ public class ClientServiceImpl implements ClientService
             ClientEntity clientEntity = Converter.getClientEntityFromClient(client, occupationEntity);
             if (clientEntity != null)
             {
-
+                clientEntity.setCreatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
                 ClientEntity savedEntity = clientRepository.save(clientEntity);
                 System.out.println("saved: " + savedEntity);
                 return Converter.getClientFromClientEntity(savedEntity);

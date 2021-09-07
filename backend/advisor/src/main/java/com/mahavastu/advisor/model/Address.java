@@ -14,7 +14,7 @@ import lombok.ToString;
 public class Address
 {
     private Integer addressId;
-    private String siteAddress;
+    private String address;
     
     private String siteGeo;
     private String subCity;

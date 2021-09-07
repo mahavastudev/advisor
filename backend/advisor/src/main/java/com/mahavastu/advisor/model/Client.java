@@ -1,5 +1,7 @@
 package com.mahavastu.advisor.model;
 
+import java.sql.Timestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +13,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Client {
+public class Client
+{
 
     private Integer clientId;
     private String clientName;
@@ -21,4 +24,6 @@ public class Client {
     private String clientPOC;
     private Occupation occupation;
     private String password;
+    private Timestamp createdDate;
+    private Address address;
 }

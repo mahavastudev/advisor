@@ -2,6 +2,8 @@ package com.mahavastu.advisor.entity;
 
 import lombok.*;
 
+import java.sql.Timestamp;
+
 import javax.persistence.*;
 
 @Entity
@@ -41,6 +43,12 @@ public class ClientEntity
 
     @Column(name = "cl_password")
     private String password;
+    
+    private Timestamp createdDate;
+    
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private AddressEntity addressEntity;
 
     public ClientEntity(
             String clientName,
