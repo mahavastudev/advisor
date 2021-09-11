@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mahavastu.advisor.model.Advice;
+import com.mahavastu.advisor.model.AdviceMetadata;
 import com.mahavastu.advisor.model.Advisor;
 import com.mahavastu.advisor.model.AdvisorLoginDetails;
 import com.mahavastu.advisor.model.LevelEnum;
@@ -72,5 +73,12 @@ public class AdviceController
             @PathVariable("query-id") Integer queryId)
     {
         adviceService.generateAndSendAdvicePdfForQuery(response, queryId);
+    }
+    
+    @GetMapping("/metedata-for-query/{query-id}")
+    public List<AdviceMetadata> getAdviceMetadataForQuery(
+            @PathVariable("query-id") Integer queryId)
+    {
+        return adviceService.getAdviceMetadataForQuery(queryId);
     }
 }

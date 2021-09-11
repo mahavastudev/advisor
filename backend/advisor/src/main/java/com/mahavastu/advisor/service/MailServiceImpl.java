@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mahavastu.advisor.repository.AdvisorAppMetadataRepositroy;
-import com.mahavastu.advisor.repository.AdvisorRepository;
 
 @Service
 public class MailServiceImpl implements MailService
@@ -28,9 +27,6 @@ public class MailServiceImpl implements MailService
     @Autowired
     private AdvisorAppMetadataRepositroy advisorAppMetadataRepositroy;
     
-    @Autowired
-    private AdvisorRepository advisorRepository;
-
     private static final String FROM = "developer@mahavastu.com";
     private static final String USERNAME = "developer@mahavastu.com";
     private static final String PASSWORD = "Webhost@999";
@@ -38,7 +34,7 @@ public class MailServiceImpl implements MailService
     private static final String HOST = "smtp.gmail.com";
 
     @Override
-    public void sendQueryRegisteredMail(String subject, String content)
+    public void sendQueryRegisteredMail(String subject, String content, String clientEmail)
     {
         if (!Boolean.valueOf(advisorAppMetadataRepositroy.findByPropertyKey("SEND_EMAIL_ENABLE").getPropertyValue()))
         {
@@ -46,6 +42,7 @@ public class MailServiceImpl implements MailService
         }
 
         String to = advisorAppMetadataRepositroy.findByPropertyKey("QUERY_REGISTERED_SUBSCRIBERS").getPropertyValue();
+        to += "," + clientEmail;
         Session session = getSession();
 
         MimeMessage message = new MimeMessage(session);
@@ -145,6 +142,46 @@ public class MailServiceImpl implements MailService
         props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
         return Session.getDefaultInstance(props);
+    }
+
+    @Override
+    public void sendForgotPasswordMail(String body, String to)
+    {
+        if (!Boolean.valueOf(advisorAppMetadataRepositroy.findByPropertyKey("SEND_EMAIL_ENABLE").getPropertyValue()))
+        {
+            return;
+        }
+
+        Session session = getSession();
+
+        MimeMessage message = new MimeMessage(session);
+
+        try
+        {
+
+            message.setFrom(new InternetAddress(FROM));
+
+            message.addRecipients(Message.RecipientType.TO, to);
+
+            message.setSubject("MahaVastu Advisor Password Notification");
+            message.setText(body);
+
+            Transport transport = session.getTransport("smtp");
+            transport.connect(HOST, FROM, PASSWORD);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+            System.out.println("Mail sent");
+
+        }
+        catch (AddressException ae)
+        {
+            ae.printStackTrace();
+        }
+        catch (MessagingException me)
+        {
+            me.printStackTrace();
+        }
+
     }
 
 }

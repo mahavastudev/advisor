@@ -20,4 +20,7 @@ public class Site
     private String plotArea;
     private String coveredArea;
     private Address address;
+    private String fileNumber;
+    private String locationOfFile;
+    private Advisor createdByAdvisor;
 }

@@ -46,6 +46,13 @@ public class SiteEntity
     @JoinColumn(name = "address_id")
     private AddressEntity addressEntity;
 
+    private String fileNumber;
+    private String locationOfFile;
+    
+    @OneToOne
+    @JoinColumn(name = "created_by_advisor_id")
+    private AdvisorEntity createdByAdvisorEntity;
+    
     public SiteEntity(
             String siteName,
             SiteTypeEntity siteType,
@@ -54,7 +61,9 @@ public class SiteEntity
             String conditionType,
             String plotArea,
             String coveredArea,
-            AddressEntity addressEntity)
+            AddressEntity addressEntity,
+            String fileNumber,
+            String locationOfFile)
     {
         this.siteName = siteName;
         this.siteType = siteType;
@@ -64,5 +73,7 @@ public class SiteEntity
         this.plotArea = plotArea;
         this.coveredArea = coveredArea;
         this.addressEntity = addressEntity;
+        this.fileNumber = fileNumber;
+        this.locationOfFile = locationOfFile;
     }
 }

@@ -34,7 +34,11 @@ public final class Converter
         // Empty Constructor as this is a Util Class.
     }
 
-    public static SiteEntity buildSiteEntityFromSite(Site site, ClientEntity clientEntity, SiteTypeEntity siteTypeEntity, AddressEntity addressEntity)
+    public static SiteEntity buildSiteEntityFromSite(
+            Site site,
+            ClientEntity clientEntity,
+            SiteTypeEntity siteTypeEntity,
+            AddressEntity addressEntity)
     {
         if (site == null)
         {
@@ -48,10 +52,17 @@ public final class Converter
                 site.getConditionType(),
                 site.getPlotArea(),
                 site.getCoveredArea(),
-                addressEntity);
+                addressEntity,
+                site.getFileNumber(),
+                site.getLocationOfFile());
     }
 
-    public static SiteEntity getSiteEntityFromSite(Site site, ClientEntity clientEntity, SiteTypeEntity siteTypeEntity, AddressEntity addressEntity)
+    public static SiteEntity getSiteEntityFromSite(
+            Site site,
+            ClientEntity clientEntity,
+            SiteTypeEntity siteTypeEntity,
+            AddressEntity addressEntity,
+            AdvisorEntity createdByAdvisorEntity)
     {
         if (site == null || clientEntity == null)
         {
@@ -60,13 +71,16 @@ public final class Converter
         return new SiteEntity(
                 site.getSiteId(),
                 site.getSiteName(),
-                siteTypeEntity,                
+                siteTypeEntity,
                 site.getSiteMapId(),
                 clientEntity,
                 site.getConditionType(),
                 site.getPlotArea(),
                 site.getCoveredArea(),
-                addressEntity);
+                addressEntity,
+                site.getFileNumber(),
+                site.getLocationOfFile(),
+                createdByAdvisorEntity);
     }
 
     public static SiteTypeEntity getSiteTypeEntityFromSiteType(SiteType siteType)
@@ -126,9 +140,11 @@ public final class Converter
                 siteEntity.getConditionType(),
                 siteEntity.getPlotArea(),
                 siteEntity.getCoveredArea(),
-                getAddressFromAddressEntity(siteEntity.getAddressEntity()));
+                getAddressFromAddressEntity(siteEntity.getAddressEntity()),
+                siteEntity.getFileNumber(),
+                siteEntity.getLocationOfFile(),
+                getAdvisorFromAdvisorEntity(siteEntity.getCreatedByAdvisorEntity()));
     }
-    
 
     private static Address getAddressFromAddressEntity(AddressEntity addressEntity)
     {
@@ -146,7 +162,6 @@ public final class Converter
                 addressEntity.getCountry(),
                 addressEntity.getPinCode());
     }
-    
 
     public static UserQueryEntity getUserQueryEntityFromUserQuery(
             UserQuery userQuery,
@@ -188,7 +203,8 @@ public final class Converter
                 getMasterConcernFromMasterConcernEntity(userQueryEntity.getMasterConcernEntity()),
                 userQueryEntity.isActive(),
                 userQueryEntity.getResolveText(),
-                getAdvisorFromAdvisorEntity(userQueryEntity.getAdvisorEntity()));
+                getAdvisorFromAdvisorEntity(userQueryEntity.getAdvisorEntity()),
+                getAdvisorFromAdvisorEntity(userQueryEntity.getCreatedByAdvisorEntity()));
     }
 
     public static MasterConcern getMasterConcernFromMasterConcernEntity(MasterConcernEntity masterConcernEntity)
@@ -360,7 +376,8 @@ public final class Converter
                 advice.getConcerns(),
                 advice.getIntuitiveDiagnosis(),
                 advice.getInner12Devta(),
-                advisorEntity);
+                advisorEntity,
+                advice.getAdviceUpdateDatetime());
     }
 
     public static List<AdviceEntity> getAdviceEntitiesFromAdvices(
@@ -442,7 +459,8 @@ public final class Converter
                 adviceEntity.getConcerns(),
                 adviceEntity.getIntuitiveDiagnosis(),
                 adviceEntity.getInner12Devta(),
-                getAdvisorFromAdvisorEntity(adviceEntity.getAdvisorEntity()));
+                getAdvisorFromAdvisorEntity(adviceEntity.getAdvisorEntity()),
+                adviceEntity.getAdviceUpdateDatetime());
     }
 
     public static Advisor getAdvisorFromAdvisorEntity(AdvisorEntity advisorEntity)
@@ -473,6 +491,5 @@ public final class Converter
                 address.getCountry(),
                 address.getPinCode());
     }
-
 
 }

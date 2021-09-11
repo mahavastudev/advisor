@@ -3,7 +3,9 @@ package com.mahavastu.advisor.service;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +46,7 @@ public class UserQueryServiceImpl implements UserQueryService
     @Autowired
     private AdvisorRepository advisorRepository;
 
-    private static String MAIL_CONTENT_STRING = "Hi, \n\n A new query has been registered by the Client: %s (client-id: %s) for the site: %s (site-id: %s) with the text of the query as:\n\n%s: %s\n\nThanks and Regards,\nMahavastu Advisor Team";
+    private static String MAIL_CONTENT_STRING = "Hi, \n\nA new query has been registered by the Client: %s (client-id: %s) for the site: %s (site-id: %s) with the text of the query as:\n\n%s: %s\n\nThanks and Regards,\nMahavastu Advisor Team";
 
     @Override
     public UserQuery addUserQuery(UserQuery userQuery)
@@ -79,7 +81,8 @@ public class UserQueryServiceImpl implements UserQueryService
                                 savedEntity.getSite().getSiteName(),
                                 savedEntity.getSite().getSiteId(),
                                 savedEntity.getMasterConcernEntity().getConcernName(),
-                                savedEntity.getQueryText()));
+                                savedEntity.getQueryText()),
+                        savedEntity.getClient().getClientEmail());
             }
         }).start();
 
@@ -147,5 +150,21 @@ public class UserQueryServiceImpl implements UserQueryService
                     "Query with id as %s could not be marked as resolved.",
                     userQueryId);
         }
+    }
+
+    @Override
+    public Map<String, Long> getBasicQueryStats()
+    {
+        Map<String, Long> basicStats = new HashMap<>();
+        List<UserQueryEntity> userQueryEntities = userQueryRepository.findAll();
+        long totalQueries = userQueryEntities.size();
+        long resolvedQueries = userQueryEntities.stream().filter(e -> !e.isActive()).count();
+        long activeQueries = totalQueries - resolvedQueries;
+        
+        basicStats.put("ALL_QUERIES_COUNT", totalQueries);
+        basicStats.put("ALL_QUERIES_RESOLVED_COUNT", resolvedQueries);
+        basicStats.put("ALL_QUERIES_ACTIVE_COUNT", activeQueries);
+        
+        return basicStats;
     }
 }

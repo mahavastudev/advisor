@@ -1,5 +1,7 @@
 package com.mahavastu.advisor.model;
 
+import java.sql.Timestamp;
+
 import lombok.*;
 
 @Getter
@@ -86,5 +88,7 @@ public class Advice
     private String inner12Devta;
     
     private Advisor advisor;
+    
+    private Timestamp adviceUpdateDatetime;
 
 }

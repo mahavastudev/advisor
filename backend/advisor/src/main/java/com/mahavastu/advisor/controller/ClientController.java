@@ -47,4 +47,11 @@ public class ClientController
     {
         return clientService.getAllOccupations();
     }
+    
+    @PostMapping("/forgot-password")
+    @ResponseBody
+    public String forgotPassword(@RequestBody Client client)
+    {
+        return clientService.sendClientPasswordMail(client);
+    }
 }

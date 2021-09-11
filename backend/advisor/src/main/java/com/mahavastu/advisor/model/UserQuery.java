@@ -23,4 +23,5 @@ public class UserQuery {
     private boolean isActive;
     private String resolveText;
     private Advisor advisor;
+    private Advisor createdByAdvisor;
 }

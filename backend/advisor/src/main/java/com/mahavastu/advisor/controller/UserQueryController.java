@@ -1,6 +1,7 @@
 package com.mahavastu.advisor.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -67,4 +68,12 @@ public class UserQueryController
     {
         return userQueryService.resolveQueryByQueryId(userQuery.getQueryId(), userQuery.getResolveText(), advisorId);
     }
+    
+    @GetMapping("/basic-query-stats")
+    @ResponseBody
+    public Map<String, Long> getBasicQueryStats()
+    {
+        return userQueryService.getBasicQueryStats();
+    }
+    
 }

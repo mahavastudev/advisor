@@ -14,4 +14,6 @@ public interface ClientService {
     List<Occupation> getAllOccupations();
 
     Client updateClient(Client client);
+
+    String sendClientPasswordMail(Client client);
 }

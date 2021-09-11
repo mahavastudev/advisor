@@ -1,6 +1,13 @@
 package com.mahavastu.advisor.service;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.mahavastu.advisor.entity.AddressEntity;
+import com.mahavastu.advisor.entity.AdvisorEntity;
 import com.mahavastu.advisor.entity.ClientEntity;
 import com.mahavastu.advisor.entity.SiteEntity;
 import com.mahavastu.advisor.entity.SiteTypeEntity;
@@ -9,14 +16,10 @@ import com.mahavastu.advisor.model.Address;
 import com.mahavastu.advisor.model.Site;
 import com.mahavastu.advisor.model.SiteType;
 import com.mahavastu.advisor.repository.AddressRepository;
+import com.mahavastu.advisor.repository.AdvisorRepository;
 import com.mahavastu.advisor.repository.ClientRepository;
 import com.mahavastu.advisor.repository.SiteRepository;
 import com.mahavastu.advisor.repository.SiteTypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
 
 @Service
 public class SiteServiceImpl implements SiteService{
@@ -32,7 +35,7 @@ public class SiteServiceImpl implements SiteService{
     
     @Autowired
     private AddressRepository addressRepository;
-
+    
     @Override
     public Site addSite(Site site) {
 
@@ -68,8 +71,10 @@ public class SiteServiceImpl implements SiteService{
         ClientEntity clientEntity = clientRepository.getById(site.getClient().getClientId());
         SiteTypeEntity siteTypeEntity = siteTypeRepository.getById(site.getSiteType().getSiteTypeId());
         AddressEntity addressEntity = addressRepository.getById(site.getAddress().getAddressId());
+        SiteEntity existingSiteEnitity = siteRepository.getById(site.getSiteId());
+        AdvisorEntity createdByAdvisorEntity = existingSiteEnitity.getCreatedByAdvisorEntity();
         
-        SiteEntity siteEntity = Converter.getSiteEntityFromSite(site, clientEntity, siteTypeEntity, addressEntity);
+        SiteEntity siteEntity = Converter.getSiteEntityFromSite(site, clientEntity, siteTypeEntity, addressEntity, createdByAdvisorEntity);
 
         if(siteEntity != null) {
             System.out.println(siteEntity);

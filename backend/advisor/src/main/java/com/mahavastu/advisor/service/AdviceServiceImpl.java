@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,6 +33,7 @@ import com.mahavastu.advisor.entity.UserQueryEntity;
 import com.mahavastu.advisor.entity.advice.AdviceEntity;
 import com.mahavastu.advisor.entity.converter.Converter;
 import com.mahavastu.advisor.model.Advice;
+import com.mahavastu.advisor.model.AdviceMetadata;
 import com.mahavastu.advisor.model.Advisor;
 import com.mahavastu.advisor.model.AdvisorLoginDetails;
 import com.mahavastu.advisor.model.LevelEnum;
@@ -41,6 +46,7 @@ import com.mahavastu.advisor.repository.AdvisorRepository;
 import com.mahavastu.advisor.repository.ClientRepository;
 import com.mahavastu.advisor.repository.SiteRepository;
 import com.mahavastu.advisor.repository.UserQueryRepository;
+import com.mahavastu.advisor.utility.AdviceUtil;
 import com.mahavastu.advisor.utility.FileUtility;
 import com.mahavastu.advisor.utility.PdfFillUtility;
 
@@ -75,7 +81,7 @@ public class AdviceServiceImpl implements AdviceService
         {
             message = "Advice is not be updated! Please try again!";
         }
-        else if(advisorEntityOptional == null || !advisorEntityOptional.isPresent())
+        else if (advisorEntityOptional == null || !advisorEntityOptional.isPresent())
         {
             message = "Advice could not be updated! Advisor not found. Please try again!";
         }
@@ -86,12 +92,16 @@ public class AdviceServiceImpl implements AdviceService
             SiteEntity siteEntity = siteRepository.getById(firstAdvice.getUserQuery().getSiteId());
             ClientEntity clientEntity = clientRepository.getById(firstAdvice.getUserQuery().getClient().getClientId());
             AdvisorEntity advisorEntity = advisorEntityOptional.get();
-            
+
             List<AdviceEntity> adviceEntities = Converter
                     .getAdviceEntitiesFromAdvices(advices, userQueryEntity, siteEntity, clientEntity, advisorEntity);
 
             if (!CollectionUtils.isEmpty(adviceEntities))
             {
+                adviceEntities.stream().forEach(
+                        adviceEntity -> adviceEntity
+                                .setAdviceUpdateDatetime(new Timestamp(Calendar.getInstance().getTimeInMillis())));
+
                 List<AdviceEntity> savedEntities = adviceRepository.saveAll(adviceEntities);
                 AdviceEntity firstSavedEntity = savedEntities.iterator().next();
                 message = String.format(
@@ -154,7 +164,7 @@ public class AdviceServiceImpl implements AdviceService
 
             // Generic Details
             PdfFillUtility.fillGenericDetails(userQuery, site, form);
-            
+
             // Client Info
             PdfFillUtility.fillClientInfo(userQuery, form);
 
@@ -212,68 +222,68 @@ public class AdviceServiceImpl implements AdviceService
                 .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_B_SUGGESTION_FOR_PRAKRITI))
                 .collect(Collectors.toList());
         PdfFillUtility.fillPrakritiBalancingAudit(prakritiBalancingAudits, form);
-        
+
         // Disha Bal Audit
         List<Advice> dishaBalAudits = advices.stream()
                 .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_C_DISHA_BAL))
                 .collect(Collectors.toList());
         PdfFillUtility.fillDishaBalBalancingAudit(dishaBalAudits, form);
-        
+
         // Five Elements Audit
         List<Advice> fiveAudits = advices.stream()
                 .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_D_FIVE_ELEMENTS))
                 .collect(Collectors.toList());
         PdfFillUtility.fillFiveElementsAudit(fiveAudits, form);
-        
+
         // Activity Audit
         List<Advice> activityAudits = advices.stream()
                 .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_E_ACTIVITY))
                 .collect(Collectors.toList());
         PdfFillUtility.fillActivityAudit(activityAudits, form);
-        
+
         // Utility Audit
         List<Advice> utilityAudits = advices.stream()
                 .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_F_UTILITY))
                 .collect(Collectors.toList());
         PdfFillUtility.fillUtilityAudit(utilityAudits, form);
-        
+
         // Objects Audit
         List<Advice> objectAudits = advices.stream()
                 .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_G_OBJECTS))
                 .collect(Collectors.toList());
         PdfFillUtility.fillObjectAudit(objectAudits, form);
-        
+
         // Remedies Audit
         List<Advice> remediesAudits = advices.stream()
                 .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_H_REMEDIES))
                 .collect(Collectors.toList());
-        PdfFillUtility.fillRemediesAudit(remediesAudits, form);  
-        
+        PdfFillUtility.fillRemediesAudit(remediesAudits, form);
+
         // Astro Audit - 1
         List<Advice> astroOneAudits = advices.stream()
                 .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_I_ASTRO_AUDIT_1))
                 .collect(Collectors.toList());
         PdfFillUtility.fillAstroOneAudit(astroOneAudits, form);
-        
+
         // Astro Audit - 2
         List<Advice> astroTwoAudits = advices.stream()
                 .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_I_ASTRO_AUDIT_2))
                 .collect(Collectors.toList());
         // Resolve Zone issues
         // TODO OJASVI PdfFillUtility.fillAstroTwoAudit(astroTwoAudits, form);
-        
+
         // Astro Remedies Audit - 3
         List<Advice> astroRemediesThreeAudits = advices.stream()
                 .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_I_ASTRO_AUDIT_3))
                 .collect(Collectors.toList());
         PdfFillUtility.fillAstroRemediesThreeAudit(astroRemediesThreeAudits, form);
-        
+
         // Marma Audit
         List<Advice> marmaAudits = advices.stream()
                 .filter(advice -> advice.getLevel().equals(LevelEnum.LEVEL_1_J_MARMA))
                 .collect(Collectors.toList());
         PdfFillUtility.fillMarmaAudit(marmaAudits, form);
-        
+
     }
 
     private String copyTemplatesForRequest(List<Advice> advices)
@@ -324,11 +334,32 @@ public class AdviceServiceImpl implements AdviceService
             return null;
         }
 
-        AdvisorEntity advisorEntity = advisorRepository.findByAdvisorEmailOrAdvisorMobile(advisorLoginDetails.getAdvisorId(), advisorLoginDetails.getAdvisorId());
+        AdvisorEntity advisorEntity = advisorRepository
+                .findByAdvisorEmailOrAdvisorMobile(advisorLoginDetails.getAdvisorId(), advisorLoginDetails.getAdvisorId());
         if (advisorEntity != null && advisorEntity.getPassword().equals(advisorLoginDetails.getPassword()))
         {
             return Converter.getAdvisorFromAdvisorEntity(advisorEntity);
         }
         return null;
+    }
+
+    @Override
+    public List<AdviceMetadata> getAdviceMetadataForQuery(Integer queryId)
+    {
+        List<AdviceMetadata> adviceMetadataList = new ArrayList<>();
+
+        List<AdviceEntity> adviceEntities = adviceRepository.findBySiteQueryCompositeKeyUserQueryEntityQueryId(queryId);
+        adviceEntities.stream().forEach(adviceEntity -> {
+
+            AdviceMetadata adviceMetadata = new AdviceMetadata(
+                    AdviceUtil.getAnalysisFromLevelEnum(adviceEntity.getSiteQueryCompositeKey().getLevel()),
+                    Converter.getAdvisorFromAdvisorEntity(adviceEntity.getAdvisorEntity()),
+                    adviceEntity.getAdviceUpdateDatetime());
+
+            adviceMetadataList.add(adviceMetadata);
+        });
+
+        Collections.sort(adviceMetadataList, (m1, m2) -> m2.getAdviceUpdateDatetime().compareTo(m1.getAdviceUpdateDatetime()));
+        return adviceMetadataList;
     }
 }

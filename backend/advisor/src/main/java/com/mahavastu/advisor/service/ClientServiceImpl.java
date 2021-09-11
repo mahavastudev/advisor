@@ -3,20 +3,17 @@ package com.mahavastu.advisor.service;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.mahavastu.advisor.entity.ClientEntity;
-import com.mahavastu.advisor.entity.ClientImageMasterEntity;
 import com.mahavastu.advisor.entity.OccupationEntity;
 import com.mahavastu.advisor.entity.converter.Converter;
 import com.mahavastu.advisor.model.Client;
 import com.mahavastu.advisor.model.ClientLoginDetails;
 import com.mahavastu.advisor.model.Occupation;
-import com.mahavastu.advisor.repository.ClientImageMasterRepository;
 import com.mahavastu.advisor.repository.ClientRepository;
 import com.mahavastu.advisor.repository.OccupationRepository;
 
@@ -29,6 +26,11 @@ public class ClientServiceImpl implements ClientService
 
     @Autowired
     private OccupationRepository occupationRepository;
+    
+    @Autowired
+    private MailService mailService;
+    
+    private static final String FORGOT_MAIL_CONTENT_STRING = "Dear %s,\n\nHere is the password for your Advisor Portal Account: %s\n\nThanks and Regards,\nAdvisor Portal Support Team";
 
     @Override
     public Client login(ClientLoginDetails client)
@@ -102,5 +104,25 @@ public class ClientServiceImpl implements ClientService
             return Converter.getClientFromClientEntity(savedEntity);
         }
         return null;
+    }
+
+    @Override
+    public String sendClientPasswordMail(Client client)
+    {
+        if (client == null || StringUtils.isEmpty(client.getClientEmail()))
+        {
+            return "Cannot proceed with the request now. Please try again or contact the Admin.";
+        }
+        ClientEntity clientEntity = clientRepository
+                .findByClientEmailOrClientMobile(client.getClientEmail(), client.getClientEmail());
+        if (clientEntity == null)
+        {
+            return String.format("No User present with email or phone number as {}", client.getClientEmail());
+        }
+        mailService.sendForgotPasswordMail(
+                String.format(FORGOT_MAIL_CONTENT_STRING, clientEntity.getClientName(), clientEntity.getPassword()), 
+                clientEntity.getClientEmail());
+        
+        return String.format("Please check for your mail at: %s", clientEntity.getClientEmail());
     }
 }

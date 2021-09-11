@@ -1,5 +1,7 @@
 package com.mahavastu.advisor.entity.advice;
 
+import java.sql.Timestamp;
+
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -100,6 +102,8 @@ public class AdviceEntity
     @OneToOne
     @JoinColumn(name = "advisor_id")
     private AdvisorEntity advisorEntity;
+    
+    private Timestamp adviceUpdateDatetime;
 
 
 }

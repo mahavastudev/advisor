@@ -44,6 +44,10 @@ public class UserQueryEntity {
     @OneToOne
     @JoinColumn(name = "advisor_id")
     private AdvisorEntity advisorEntity;
+    
+    @OneToOne
+    @JoinColumn(name = "created_by_advisor_id")
+    private AdvisorEntity createdByAdvisorEntity;
 
     public UserQueryEntity(ClientEntity client, String queryText, Timestamp queryCreateDateTime, Timestamp queryUpdateDateTime, SiteEntity site, Integer horoId, MasterConcernEntity masterConcernEntity, String resolveText, AdvisorEntity advisorEntity) {
         this.client = client;
