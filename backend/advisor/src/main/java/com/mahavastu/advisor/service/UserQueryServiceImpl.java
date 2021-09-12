@@ -191,7 +191,16 @@ public class UserQueryServiceImpl implements UserQueryService
                 || (StringUtils.isEmpty(searchElement.getClientEmail())
                         && StringUtils.isEmpty(searchElement.getClientName())
                         && StringUtils.isEmpty(searchElement.getClientPhone())
-                        && StringUtils.isEmpty(searchElement.getQueryConcern())))
+                        && StringUtils.isEmpty(searchElement.getQueryConcern())
+                        && StringUtils.isEmpty(searchElement.getCity())
+                        && StringUtils.isEmpty(searchElement.getCountry())
+                        && StringUtils.isEmpty(searchElement.getMinCoveredAreaSize())
+                        && StringUtils.isEmpty(searchElement.getMaxCoveredAreaSize())
+                        && StringUtils.isEmpty(searchElement.getMinPlotAreaSize())
+                        && StringUtils.isEmpty(searchElement.getMaxPlotAreaSize())
+                        && StringUtils.isEmpty(searchElement.getState())
+                        && StringUtils.isEmpty(searchElement.getSubCity())
+                        && StringUtils.isEmpty(searchElement.getSiteType())))
         {
             return Converter.getUserQueriesFromUserQueryEntities(userQueryEntities);
         }
@@ -217,6 +226,53 @@ public class UserQueryServiceImpl implements UserQueryService
         {
             userQueryStream = userQueryStream
                     .filter(e -> e.getMasterConcernEntity().getConcernName().equalsIgnoreCase(searchElement.getQueryConcern()));
+        }
+        
+        // Site-Filters
+        if (!StringUtils.isEmpty(searchElement.getCountry()))
+        {
+            userQueryStream = userQueryStream
+                    .filter(e -> e.getSite().getAddressEntity().getCountry().equalsIgnoreCase(searchElement.getCountry()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getMaxCoveredAreaSize()))
+        {
+            userQueryStream = userQueryStream
+                    .filter(e -> Integer.parseInt(e.getSite().getCoveredArea()) <= Integer.parseInt(searchElement.getMaxCoveredAreaSize()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getMinCoveredAreaSize()))
+        {
+            userQueryStream = userQueryStream
+                    .filter(e -> Integer.parseInt(e.getSite().getCoveredArea()) >= Integer.parseInt(searchElement.getMinCoveredAreaSize()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getMinPlotAreaSize()))
+        {
+            userQueryStream = userQueryStream
+                    .filter(e -> Integer.parseInt(e.getSite().getPlotArea()) <= Integer.parseInt(searchElement.getMinPlotAreaSize()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getMaxPlotAreaSize()))
+        {
+            userQueryStream = userQueryStream
+                    .filter(e -> Integer.parseInt(e.getSite().getPlotArea()) >= Integer.parseInt(searchElement.getMaxPlotAreaSize()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getState()))
+        {
+            userQueryStream = userQueryStream
+                    .filter(e -> e.getSite().getAddressEntity().getState().equalsIgnoreCase(searchElement.getState()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getSubCity()))
+        {
+            userQueryStream = userQueryStream
+                    .filter(e -> e.getSite().getAddressEntity().getSubCity().equalsIgnoreCase(searchElement.getSubCity()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getSiteType()))
+        {
+            userQueryStream = userQueryStream
+                    .filter(e -> e.getSite().getSiteType().getSiteTypeName().equalsIgnoreCase(searchElement.getSiteType()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getCity()))
+        {
+            userQueryStream = userQueryStream
+                    .filter(e -> e.getSite().getAddressEntity().getCity().equalsIgnoreCase(searchElement.getCity()));
         }
         return Converter.getUserQueriesFromUserQueryEntities(userQueryStream.collect(Collectors.toList()));
     }

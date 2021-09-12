@@ -147,7 +147,10 @@ public class SiteServiceImpl implements SiteService
 
         List<SiteEntity> siteEntities = siteRepository.findAll();
         if ((searchElement == null)
-                || (StringUtils.isEmpty(searchElement.getCity())
+                || (StringUtils.isEmpty(searchElement.getClientEmail())
+                        && StringUtils.isEmpty(searchElement.getClientName())
+                        && StringUtils.isEmpty(searchElement.getClientPhone())
+                        && StringUtils.isEmpty(searchElement.getCity())
                         && StringUtils.isEmpty(searchElement.getCountry())
                         && StringUtils.isEmpty(searchElement.getMinCoveredAreaSize())
                         && StringUtils.isEmpty(searchElement.getMaxCoveredAreaSize())
@@ -161,6 +164,25 @@ public class SiteServiceImpl implements SiteService
         }
 
         Stream<SiteEntity> siteEntitiesStream = siteEntities.stream();
+        
+        // Client
+        if (!StringUtils.isEmpty(searchElement.getClientEmail()))
+        {
+            siteEntitiesStream = siteEntitiesStream
+                    .filter(e -> e.getClient().getClientEmail().equalsIgnoreCase(searchElement.getClientEmail()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getClientName()))
+        {
+            siteEntitiesStream = siteEntitiesStream
+                    .filter(e -> e.getClient().getClientName().equalsIgnoreCase(searchElement.getClientName()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getClientPhone()))
+        {
+            siteEntitiesStream = siteEntitiesStream
+                    .filter(e -> e.getClient().getClientMobile().equalsIgnoreCase(searchElement.getClientPhone()));
+        }
+        
+        // Site
         if (!StringUtils.isEmpty(searchElement.getCountry()))
         {
             siteEntitiesStream = siteEntitiesStream
