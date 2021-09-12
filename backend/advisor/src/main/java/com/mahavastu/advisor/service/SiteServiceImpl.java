@@ -166,15 +166,25 @@ public class SiteServiceImpl implements SiteService
             siteEntitiesStream = siteEntitiesStream
                     .filter(e -> e.getAddressEntity().getCountry().equalsIgnoreCase(searchElement.getCountry()));
         }
-        if (!StringUtils.isEmpty(searchElement.getMaxSize()))
+        if (!StringUtils.isEmpty(searchElement.getMaxCoveredAreaSize()))
         {
             siteEntitiesStream = siteEntitiesStream
-                    .filter(e -> Integer.parseInt(e.getCoveredArea()) <= Integer.parseInt(searchElement.getMaxSize()));
+                    .filter(e -> Integer.parseInt(e.getCoveredArea()) <= Integer.parseInt(searchElement.getMaxCoveredAreaSize()));
         }
-        if (!StringUtils.isEmpty(searchElement.getMaxSize()))
+        if (!StringUtils.isEmpty(searchElement.getMinCoveredAreaSize()))
         {
             siteEntitiesStream = siteEntitiesStream
-                    .filter(e -> Integer.parseInt(e.getCoveredArea()) >= Integer.parseInt(searchElement.getMinSize()));
+                    .filter(e -> Integer.parseInt(e.getCoveredArea()) >= Integer.parseInt(searchElement.getMinCoveredAreaSize()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getMinPlotAreaSize()))
+        {
+            siteEntitiesStream = siteEntitiesStream
+                    .filter(e -> Integer.parseInt(e.getPlotArea()) <= Integer.parseInt(searchElement.getMinPlotAreaSize()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getMaxPlotAreaSize()))
+        {
+            siteEntitiesStream = siteEntitiesStream
+                    .filter(e -> Integer.parseInt(e.getPlotArea()) >= Integer.parseInt(searchElement.getMaxPlotAreaSize()));
         }
         if (!StringUtils.isEmpty(searchElement.getState()))
         {
