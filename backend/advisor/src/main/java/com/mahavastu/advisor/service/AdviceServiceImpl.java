@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -353,7 +354,7 @@ public class AdviceServiceImpl implements AdviceService
         List<AdviceEntity> adviceEntities = adviceRepository.findBySiteQueryCompositeKeyUserQueryEntityQueryId(queryId);
         adviceEntities.stream().forEach(adviceEntity -> {
 
-            if(!isCurrentLevelAlreadyAdded(adviceMetadataList, adviceEntity.getSiteQueryCompositeKey().getLevel()))
+            if(!isCurrentLevelAlreadyAdded(adviceMetadataList, adviceEntity.getSiteQueryCompositeKey().getLevel(), adviceEntity.getAdviceUpdateDatetime()))
             {
                 AdviceMetadata adviceMetadata = new AdviceMetadata(
                         AdviceUtil.getAnalysisFromLevelEnum(adviceEntity.getSiteQueryCompositeKey().getLevel()),
@@ -369,17 +370,27 @@ public class AdviceServiceImpl implements AdviceService
         return adviceMetadataList;
     }
 
-    private boolean isCurrentLevelAlreadyAdded(List<AdviceMetadata> adviceMetadataList, LevelEnum level)
+    private boolean isCurrentLevelAlreadyAdded(List<AdviceMetadata> adviceMetadataList, LevelEnum level, Timestamp adviceUpdateDatetime)
     {
         if(CollectionUtils.isEmpty(adviceMetadataList))
         {
             return false;
         }
-        for (AdviceMetadata adviceMetadata : adviceMetadataList)
+        Iterator<AdviceMetadata> adviceMetadataListIterator = adviceMetadataList.iterator();
+        while(adviceMetadataListIterator.hasNext())
         {
+            AdviceMetadata adviceMetadata = adviceMetadataListIterator.next();
             if (adviceMetadata.getAnalysis().equals(AdviceUtil.getAnalysisFromLevelEnum(level)))
             {
-                return true;
+                if(adviceUpdateDatetime.after(adviceMetadata.getAdviceUpdateDatetime()))
+                {
+                    adviceMetadataListIterator.remove();
+                }
+                else
+                {
+                    return true;
+                }
+                
             }
         }
         return false;
