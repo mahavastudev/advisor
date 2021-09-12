@@ -15,8 +15,10 @@ public class SearchElement
 {
 
     // Site
-    private String minSize;
-    private String maxSize;
+    private String minCoveredAreaSize;
+    private String maxCoveredAreaSize;
+    private String minPlotAreaSize;
+    private String maxPlotAreaSize;
     private String city;
     private String country;
     private String state;
