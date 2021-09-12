@@ -1,5 +1,6 @@
 package com.mahavastu.advisor.service;
 
+import com.mahavastu.advisor.model.SearchElement;
 import com.mahavastu.advisor.model.Site;
 import com.mahavastu.advisor.model.SiteType;
 
@@ -12,4 +13,5 @@ public interface SiteService {
     List<SiteType> getAllSiteTypes();
     Site updateSite(Site site);
     List<Site> getAllSites();
+    List<Site> getFilteredSites(SearchElement searchElement);
 }

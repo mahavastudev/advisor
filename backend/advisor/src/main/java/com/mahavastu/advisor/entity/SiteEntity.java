@@ -63,7 +63,8 @@ public class SiteEntity
             String coveredArea,
             AddressEntity addressEntity,
             String fileNumber,
-            String locationOfFile)
+            String locationOfFile,
+            AdvisorEntity createdByAdvisorEntity)
     {
         this.siteName = siteName;
         this.siteType = siteType;
@@ -75,5 +76,6 @@ public class SiteEntity
         this.addressEntity = addressEntity;
         this.fileNumber = fileNumber;
         this.locationOfFile = locationOfFile;
+        this.createdByAdvisorEntity = createdByAdvisorEntity;
     }
 }

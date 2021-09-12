@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import com.mahavastu.advisor.entity.MasterConcernEntity;
 import com.mahavastu.advisor.entity.SiteEntity;
 import com.mahavastu.advisor.entity.UserQueryEntity;
 import com.mahavastu.advisor.entity.converter.Converter;
+import com.mahavastu.advisor.model.SearchElement;
 import com.mahavastu.advisor.model.UserQuery;
 import com.mahavastu.advisor.repository.AdvisorRepository;
 import com.mahavastu.advisor.repository.ClientRepository;
@@ -51,12 +54,24 @@ public class UserQueryServiceImpl implements UserQueryService
     @Override
     public UserQuery addUserQuery(UserQuery userQuery)
     {
-        ClientEntity clientEntity = clientRepository.getById(userQuery.getClient().getClientId());
+        ClientEntity clientEntity = null;
+        if(userQuery.getClient().getClientId() == null) 
+        {
+            clientEntity = clientRepository.findByClientEmailOrClientMobile(userQuery.getClient().getClientEmail(), userQuery.getClient().getClientEmail());
+        }
+        else
+        {
+            clientEntity = clientRepository.getById(userQuery.getClient().getClientId());;
+        }
         SiteEntity siteEntity = siteRepository.getById(userQuery.getSiteId());
         MasterConcernEntity masterConcernEntity = masterConcernRepository.getById(userQuery.getMasterConcern().getConcernId());
-
+        
+        AdvisorEntity createdAdvisorEntity = (userQuery.getCreatedByAdvisor() == null || userQuery.getCreatedByAdvisor().getAdvisorId() == null)
+                                        ? null
+                                        : advisorRepository.getById(userQuery.getCreatedByAdvisor().getAdvisorId());
+        
         UserQueryEntity userQueryEntity = Converter
-                .getUserQueryEntityFromUserQuery(userQuery, clientEntity, siteEntity, masterConcernEntity, null);
+                .getUserQueryEntityFromUserQuery(userQuery, clientEntity, siteEntity, masterConcernEntity, null, createdAdvisorEntity);
         if (userQueryEntity == null)
         {
             return null;
@@ -166,5 +181,43 @@ public class UserQueryServiceImpl implements UserQueryService
         basicStats.put("ALL_QUERIES_ACTIVE_COUNT", activeQueries);
         
         return basicStats;
+    }
+    
+    @Override
+    public List<UserQuery> getFilteredUserQueries(SearchElement searchElement)
+    {
+        List<UserQueryEntity> userQueryEntities = userQueryRepository.findAll();
+        if ((searchElement == null)
+                || (StringUtils.isEmpty(searchElement.getClientEmail())
+                        && StringUtils.isEmpty(searchElement.getClientName())
+                        && StringUtils.isEmpty(searchElement.getClientPhone())
+                        && StringUtils.isEmpty(searchElement.getQueryConcern())))
+        {
+            return Converter.getUserQueriesFromUserQueryEntities(userQueryEntities);
+        }
+
+        Stream<UserQueryEntity> userQueryStream = userQueryEntities.stream();
+
+        if (!StringUtils.isEmpty(searchElement.getClientEmail()))
+        {
+            userQueryStream = userQueryStream
+                    .filter(e -> e.getClient().getClientEmail().equalsIgnoreCase(searchElement.getClientEmail()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getClientName()))
+        {
+            userQueryStream = userQueryStream
+                    .filter(e -> e.getClient().getClientName().equalsIgnoreCase(searchElement.getClientName()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getClientPhone()))
+        {
+            userQueryStream = userQueryStream
+                    .filter(e -> e.getClient().getClientMobile().equalsIgnoreCase(searchElement.getClientPhone()));
+        }
+        if (!StringUtils.isEmpty(searchElement.getQueryConcern()))
+        {
+            userQueryStream = userQueryStream
+                    .filter(e -> e.getMasterConcernEntity().getConcernName().equalsIgnoreCase(searchElement.getQueryConcern()));
+        }
+        return Converter.getUserQueriesFromUserQueryEntities(userQueryStream.collect(Collectors.toList()));
     }
 }

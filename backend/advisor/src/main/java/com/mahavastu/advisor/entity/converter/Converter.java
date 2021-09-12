@@ -38,7 +38,8 @@ public final class Converter
             Site site,
             ClientEntity clientEntity,
             SiteTypeEntity siteTypeEntity,
-            AddressEntity addressEntity)
+            AddressEntity addressEntity,
+            AdvisorEntity createdByAdvisorEntity)
     {
         if (site == null)
         {
@@ -54,7 +55,8 @@ public final class Converter
                 site.getCoveredArea(),
                 addressEntity,
                 site.getFileNumber(),
-                site.getLocationOfFile());
+                site.getLocationOfFile(),
+                createdByAdvisorEntity);
     }
 
     public static SiteEntity getSiteEntityFromSite(
@@ -168,7 +170,8 @@ public final class Converter
             ClientEntity clientEntity,
             SiteEntity siteEntity,
             MasterConcernEntity masterConcernEntity,
-            AdvisorEntity advisorEntity)
+            AdvisorEntity advisorEntity,
+            AdvisorEntity createdByAdvisorEntity)
     {
         if (userQuery == null || clientEntity == null || siteEntity == null)
         {
@@ -183,7 +186,8 @@ public final class Converter
                 userQuery.getHoroId(),
                 masterConcernEntity,
                 userQuery.getResolveText(),
-                advisorEntity);
+                advisorEntity,
+                createdByAdvisorEntity);
     }
 
     public static UserQuery getUserQueryFromUserQueryEntity(UserQueryEntity userQueryEntity)
@@ -233,7 +237,7 @@ public final class Converter
         return userQueries;
     }
 
-    public static ClientEntity getClientEntityFromClient(Client client, OccupationEntity occupationEntity)
+    public static ClientEntity getClientEntityFromClient(Client client, OccupationEntity occupationEntity, AddressEntity addressEntity)
     {
         if (client == null)
         {
@@ -251,7 +255,7 @@ public final class Converter
                     occupationEntity,
                     client.getPassword(),
                     client.getCreatedDate(),
-                    getAddressEntityFromAddress(client.getAddress()));
+                    addressEntity);
         }
         return new ClientEntity(
                 client.getClientName(),

@@ -98,6 +98,8 @@ public class AdviceServiceImpl implements AdviceService
 
             if (!CollectionUtils.isEmpty(adviceEntities))
             {
+                userQueryEntity.setQueryUpdateDatetime(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+                userQueryRepository.save(userQueryEntity);
                 adviceEntities.stream().forEach(
                         adviceEntity -> adviceEntity
                                 .setAdviceUpdateDatetime(new Timestamp(Calendar.getInstance().getTimeInMillis())));
@@ -351,15 +353,35 @@ public class AdviceServiceImpl implements AdviceService
         List<AdviceEntity> adviceEntities = adviceRepository.findBySiteQueryCompositeKeyUserQueryEntityQueryId(queryId);
         adviceEntities.stream().forEach(adviceEntity -> {
 
-            AdviceMetadata adviceMetadata = new AdviceMetadata(
-                    AdviceUtil.getAnalysisFromLevelEnum(adviceEntity.getSiteQueryCompositeKey().getLevel()),
-                    Converter.getAdvisorFromAdvisorEntity(adviceEntity.getAdvisorEntity()),
-                    adviceEntity.getAdviceUpdateDatetime());
+            if(!isCurrentLevelAlreadyAdded(adviceMetadataList, adviceEntity.getSiteQueryCompositeKey().getLevel()))
+            {
+                AdviceMetadata adviceMetadata = new AdviceMetadata(
+                        AdviceUtil.getAnalysisFromLevelEnum(adviceEntity.getSiteQueryCompositeKey().getLevel()),
+                        Converter.getAdvisorFromAdvisorEntity(adviceEntity.getAdvisorEntity()),
+                        adviceEntity.getAdviceUpdateDatetime());
 
-            adviceMetadataList.add(adviceMetadata);
+                adviceMetadataList.add(adviceMetadata);
+            }
+            
         });
 
-        Collections.sort(adviceMetadataList, (m1, m2) -> m2.getAdviceUpdateDatetime().compareTo(m1.getAdviceUpdateDatetime()));
+        Collections.sort(adviceMetadataList, (m1, m2) -> m1.getAdviceUpdateDatetime().compareTo(m2.getAdviceUpdateDatetime()));
         return adviceMetadataList;
+    }
+
+    private boolean isCurrentLevelAlreadyAdded(List<AdviceMetadata> adviceMetadataList, LevelEnum level)
+    {
+        if(CollectionUtils.isEmpty(adviceMetadataList))
+        {
+            return false;
+        }
+        for (AdviceMetadata adviceMetadata : adviceMetadataList)
+        {
+            if (adviceMetadata.getAnalysis().equals(AdviceUtil.getAnalysisFromLevelEnum(level)))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

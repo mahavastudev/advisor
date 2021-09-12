@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mahavastu.advisor.model.SearchElement;
 import com.mahavastu.advisor.model.UserQuery;
 import com.mahavastu.advisor.service.UserQueryService;
 
@@ -74,6 +75,13 @@ public class UserQueryController
     public Map<String, Long> getBasicQueryStats()
     {
         return userQueryService.getBasicQueryStats();
+    }
+    
+    @PostMapping("/search")
+    @ResponseBody
+    public List<UserQuery> getFilteredUserQueries(@RequestBody SearchElement searchElement)
+    {
+        return userQueryService.getFilteredUserQueries(searchElement);
     }
     
 }

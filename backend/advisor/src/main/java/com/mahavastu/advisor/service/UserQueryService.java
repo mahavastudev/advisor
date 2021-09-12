@@ -1,9 +1,10 @@
 package com.mahavastu.advisor.service;
 
-import com.mahavastu.advisor.model.UserQuery;
-
 import java.util.List;
 import java.util.Map;
+
+import com.mahavastu.advisor.model.SearchElement;
+import com.mahavastu.advisor.model.UserQuery;
 
 public interface UserQueryService {
     UserQuery addUserQuery(UserQuery userQuery);
@@ -13,4 +14,5 @@ public interface UserQueryService {
     List<UserQuery> getUserQueriesBySiteId(int siteId);
     String resolveQueryByQueryId(int userQueryId, String resolveText, int advisorId);
     Map<String, Long> getBasicQueryStats();
+    List<UserQuery> getFilteredUserQueries(SearchElement searchElement);
 }

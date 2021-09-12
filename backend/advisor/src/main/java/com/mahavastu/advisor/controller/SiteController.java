@@ -1,5 +1,6 @@
 package com.mahavastu.advisor.controller;
 
+import com.mahavastu.advisor.model.SearchElement;
 import com.mahavastu.advisor.model.Site;
 import com.mahavastu.advisor.model.SiteType;
 import com.mahavastu.advisor.service.SiteService;
@@ -57,6 +58,13 @@ public class SiteController
     public List<SiteType> getSiteTypes()
     {
         return siteService.getAllSiteTypes();
+    }
+
+    @PostMapping("/search")
+    @ResponseBody
+    public List<Site> getFilteredSites(@RequestBody SearchElement searchElement)
+    {
+        return siteService.getFilteredSites(searchElement);
     }
 
 }

@@ -49,7 +49,7 @@ public class UserQueryEntity {
     @JoinColumn(name = "created_by_advisor_id")
     private AdvisorEntity createdByAdvisorEntity;
 
-    public UserQueryEntity(ClientEntity client, String queryText, Timestamp queryCreateDateTime, Timestamp queryUpdateDateTime, SiteEntity site, Integer horoId, MasterConcernEntity masterConcernEntity, String resolveText, AdvisorEntity advisorEntity) {
+    public UserQueryEntity(ClientEntity client, String queryText, Timestamp queryCreateDateTime, Timestamp queryUpdateDateTime, SiteEntity site, Integer horoId, MasterConcernEntity masterConcernEntity, String resolveText, AdvisorEntity advisorEntity, AdvisorEntity createdByAdvisorEntity) {
         this.client = client;
         this.queryText = queryText;
         this.queryCreateDatetime = queryCreateDateTime;
@@ -59,5 +59,6 @@ public class UserQueryEntity {
         this.masterConcernEntity = masterConcernEntity;
         this.resolveText = resolveText;
         this.advisorEntity = advisorEntity;
+        this.createdByAdvisorEntity = createdByAdvisorEntity;
     }
 }
