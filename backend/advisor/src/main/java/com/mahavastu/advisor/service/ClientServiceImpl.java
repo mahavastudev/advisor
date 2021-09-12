@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 
 import com.mahavastu.advisor.entity.AddressEntity;
 import com.mahavastu.advisor.entity.ClientEntity;
+import com.mahavastu.advisor.entity.ClientImageMasterEntity;
 import com.mahavastu.advisor.entity.OccupationEntity;
 import com.mahavastu.advisor.entity.converter.Converter;
 import com.mahavastu.advisor.model.Client;
@@ -65,7 +66,7 @@ public class ClientServiceImpl implements ClientService
             AddressEntity addressEntity = Converter.getAddressEntityFromAddress(client.getAddress());
             AddressEntity savedAddressEntity = addressRepository.save(addressEntity);
             System.out.println(occupationEntity);
-            ClientEntity clientEntity = Converter.getClientEntityFromClient(client, occupationEntity, savedAddressEntity);
+            ClientEntity clientEntity = Converter.getClientEntityFromClient(client, occupationEntity, savedAddressEntity, null);
             if (clientEntity != null)
             {
                 clientEntity.setAddressEntity(savedAddressEntity);
@@ -102,8 +103,9 @@ public class ClientServiceImpl implements ClientService
         System.out.println(occupationEntity);
         AddressEntity addressEntity = Converter.getAddressEntityFromAddress(client.getAddress());
         AddressEntity savedAddressEntity = addressRepository.save(addressEntity);
+        ClientImageMasterEntity clientImageMasterEntity = existingClientEntity.getClientImageMasterEntity();
         
-        ClientEntity clientEntity = Converter.getClientEntityFromClient(client, occupationEntity, savedAddressEntity);
+        ClientEntity clientEntity = Converter.getClientEntityFromClient(client, occupationEntity, savedAddressEntity, clientImageMasterEntity);
         if (clientEntity != null)
         {
             clientEntity.setAddressEntity(savedAddressEntity);

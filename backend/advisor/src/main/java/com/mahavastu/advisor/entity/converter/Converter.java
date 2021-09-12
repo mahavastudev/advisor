@@ -9,6 +9,7 @@ import org.springframework.util.CollectionUtils;
 import com.mahavastu.advisor.entity.AddressEntity;
 import com.mahavastu.advisor.entity.AdvisorEntity;
 import com.mahavastu.advisor.entity.ClientEntity;
+import com.mahavastu.advisor.entity.ClientImageMasterEntity;
 import com.mahavastu.advisor.entity.MasterConcernEntity;
 import com.mahavastu.advisor.entity.OccupationEntity;
 import com.mahavastu.advisor.entity.SiteEntity;
@@ -237,7 +238,7 @@ public final class Converter
         return userQueries;
     }
 
-    public static ClientEntity getClientEntityFromClient(Client client, OccupationEntity occupationEntity, AddressEntity addressEntity)
+    public static ClientEntity getClientEntityFromClient(Client client, OccupationEntity occupationEntity, AddressEntity addressEntity, ClientImageMasterEntity clientImageMasterEntity)
     {
         if (client == null)
         {
@@ -250,7 +251,7 @@ public final class Converter
                     client.getClientName(),
                     client.getClientMobile(),
                     client.getClientEmail(),
-                    null,
+                    clientImageMasterEntity,
                     client.getClientPOC(),
                     occupationEntity,
                     client.getPassword(),
@@ -486,7 +487,7 @@ public final class Converter
         if (address == null)
             return null;
 
-        return new AddressEntity(
+        AddressEntity addressEntity = new AddressEntity(
                 address.getAddress(),
                 address.getSiteGeo(),
                 address.getSubCity(),
@@ -494,6 +495,12 @@ public final class Converter
                 address.getState(),
                 address.getCountry(),
                 address.getPinCode());
+        if(address.getAddressId() != null)
+        {
+            addressEntity.setAddressId(address.getAddressId());
+        }
+        return addressEntity;
+        
     }
 
 }
