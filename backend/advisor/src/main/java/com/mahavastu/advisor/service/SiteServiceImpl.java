@@ -57,7 +57,6 @@ public class SiteServiceImpl implements SiteService
         else
         {
             clientEntity = clientRepository.getById(site.getClient().getClientId());
-            ;
         }
         SiteTypeEntity siteTypeEntity = siteTypeRepository.getById(site.getSiteType().getSiteTypeId());
 
@@ -154,7 +153,7 @@ public class SiteServiceImpl implements SiteService
                         && StringUtils.isEmpty(searchElement.getMinSize())
                         && StringUtils.isEmpty(searchElement.getState())
                         && StringUtils.isEmpty(searchElement.getSubCity())
-                        && StringUtils.isEmpty(searchElement.getType())))
+                        && StringUtils.isEmpty(searchElement.getSiteType())))
         {
             return Converter.getSitesFromSiteEntities(siteEntities);
         }
@@ -185,10 +184,10 @@ public class SiteServiceImpl implements SiteService
             siteEntitiesStream = siteEntitiesStream
                     .filter(e -> e.getAddressEntity().getSubCity().equalsIgnoreCase(searchElement.getSubCity()));
         }
-        if (!StringUtils.isEmpty(searchElement.getType()))
+        if (!StringUtils.isEmpty(searchElement.getSiteType()))
         {
             siteEntitiesStream = siteEntitiesStream
-                    .filter(e -> e.getSiteType().getSiteTypeName().equalsIgnoreCase(searchElement.getType()));
+                    .filter(e -> e.getSiteType().getSiteTypeName().equalsIgnoreCase(searchElement.getSiteType()));
         }
         if (!StringUtils.isEmpty(searchElement.getCity()))
         {

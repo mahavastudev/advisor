@@ -21,7 +21,7 @@ public class SearchElement
     private String country;
     private String state;
     private String subCity;
-    private String type;
+    private String siteType;
     
     // Client
     private String clientEmail;
