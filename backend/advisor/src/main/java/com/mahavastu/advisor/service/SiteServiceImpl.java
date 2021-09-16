@@ -1,13 +1,27 @@
 package com.mahavastu.advisor.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
 import com.mahavastu.advisor.entity.AddressEntity;
 import com.mahavastu.advisor.entity.AdvisorEntity;
@@ -24,6 +38,7 @@ import com.mahavastu.advisor.repository.AdvisorRepository;
 import com.mahavastu.advisor.repository.ClientRepository;
 import com.mahavastu.advisor.repository.SiteRepository;
 import com.mahavastu.advisor.repository.SiteTypeRepository;
+import com.mahavastu.advisor.utility.FileUtility;
 
 @Service
 public class SiteServiceImpl implements SiteService
@@ -43,6 +58,9 @@ public class SiteServiceImpl implements SiteService
 
     @Autowired
     private AdvisorRepository advisorRepository;
+
+    private final static String PATRI_URL = "https://vedicastrology1.mahavastu.com/vedic.astrology/vedicAstro/vedicAstroByTemplate?productId=22&languageId=2&username=advisorPortal&password=somePassword"
+            + "&name=%s&dob=%s&city=%s&state=%s&country=%s&latitude=&longitude=";
 
     @Override
     public Site addSite(Site site)
@@ -164,7 +182,7 @@ public class SiteServiceImpl implements SiteService
         }
 
         Stream<SiteEntity> siteEntitiesStream = siteEntities.stream();
-        
+
         // Client
         if (!StringUtils.isEmpty(searchElement.getClientEmail()))
         {
@@ -181,7 +199,7 @@ public class SiteServiceImpl implements SiteService
             siteEntitiesStream = siteEntitiesStream
                     .filter(e -> e.getClient().getClientMobile().equalsIgnoreCase(searchElement.getClientPhone()));
         }
-        
+
         // Site
         if (!StringUtils.isEmpty(searchElement.getCountry()))
         {
@@ -229,6 +247,41 @@ public class SiteServiceImpl implements SiteService
                     .filter(e -> e.getAddressEntity().getCity().equalsIgnoreCase(searchElement.getCity()));
         }
         return Converter.getSitesFromSiteEntities(siteEntitiesStream.collect(Collectors.toList()));
+    }
+
+    @Override
+    public void getSiteOwnerPatri(HttpServletResponse response, Integer siteId)
+    {
+        SiteEntity siteEntity = siteRepository.getById(siteId);
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add(
+                "user-agent",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+        HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+
+        // &name=%s&dob=%s&city=%s&state=%s&country=%s&latitude=&longitude=
+
+        String url = String.format(
+                PATRI_URL,
+                siteEntity.getClient().getClientName(),
+                siteEntity.getClient().getTimeStampOfBirth(),
+                siteEntity.getClient().getPlaceOfBirth().getCity(),
+                siteEntity.getClient().getPlaceOfBirth().getState(),
+                siteEntity.getClient().getPlaceOfBirth().getCountry());
+
+        ResponseEntity<byte[]> responseEntity = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                entity,
+                byte[].class);
+        if (responseEntity.getStatusCode() == HttpStatus.OK)
+        {
+            byte[] patri = responseEntity.getBody();
+            FileUtility.updateResponseWithFileBytes(response, patri);
+        }
     }
 
 }

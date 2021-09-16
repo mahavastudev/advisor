@@ -29,13 +29,13 @@ public class ClientServiceImpl implements ClientService
 
     @Autowired
     private OccupationRepository occupationRepository;
-    
+
     @Autowired
     private MailService mailService;
-    
+
     @Autowired
     private AddressRepository addressRepository;
-    
+
     private static final String FORGOT_MAIL_CONTENT_STRING = "Dear %s,\n\nHere is the password for your Advisor Portal Account: %s\n\nThanks and Regards,\nAdvisor Portal Support Team";
 
     @Override
@@ -65,19 +65,27 @@ public class ClientServiceImpl implements ClientService
             OccupationEntity occupationEntity = occupationRepository.getById(client.getOccupation().getOccupationId());
             AddressEntity addressEntity = Converter.getAddressEntityFromAddress(client.getAddress());
             AddressEntity savedAddressEntity = addressRepository.save(addressEntity);
-            System.out.println(occupationEntity);
-            ClientEntity clientEntity = Converter.getClientEntityFromClient(client, occupationEntity, savedAddressEntity, null);
+
+            AddressEntity placeOfBirthaddressEntity = Converter.getAddressEntityFromAddress(client.getPlaceOfBirth());
+            AddressEntity savedPlaceOfBirthaddressEntity = addressRepository.save(placeOfBirthaddressEntity);
+
+            ClientEntity clientEntity = Converter
+                    .getClientEntityFromClient(client, occupationEntity, savedAddressEntity, null, savedPlaceOfBirthaddressEntity);
+            
             if (clientEntity != null)
             {
                 clientEntity.setAddressEntity(savedAddressEntity);
+                clientEntity.setPlaceOfBirth(savedPlaceOfBirthaddressEntity);
+                clientEntity.setTimeStampOfBirth(client.getTimeStampOfBirth());
                 clientEntity.setCreatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
                 ClientEntity savedEntity = clientRepository.save(clientEntity);
                 System.out.println("saved: " + savedEntity);
                 return Converter.getClientFromClientEntity(savedEntity);
             }
+            
             return null;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -101,15 +109,23 @@ public class ClientServiceImpl implements ClientService
         }
         OccupationEntity occupationEntity = occupationRepository.getById(client.getOccupation().getOccupationId());
         System.out.println(occupationEntity);
+        
         AddressEntity addressEntity = Converter.getAddressEntityFromAddress(client.getAddress());
         AddressEntity savedAddressEntity = addressRepository.save(addressEntity);
-        ClientImageMasterEntity clientImageMasterEntity = existingClientEntity.getClientImageMasterEntity();
         
-        ClientEntity clientEntity = Converter.getClientEntityFromClient(client, occupationEntity, savedAddressEntity, clientImageMasterEntity);
+        AddressEntity placeOfBirthAddressEntity = existingClientEntity.getPlaceOfBirth();
+        
+        ClientImageMasterEntity clientImageMasterEntity = existingClientEntity.getClientImageMasterEntity();
+
+        ClientEntity clientEntity = Converter
+                .getClientEntityFromClient(client, occupationEntity, savedAddressEntity, clientImageMasterEntity, placeOfBirthAddressEntity);
+
         if (clientEntity != null)
         {
             clientEntity.setAddressEntity(savedAddressEntity);
-            if(StringUtils.isEmpty(client.getPassword()))
+            clientEntity.setTimeStampOfBirth(existingClientEntity.getTimeStampOfBirth());
+            clientEntity.setCreatedDate(existingClientEntity.getCreatedDate());
+            if (StringUtils.isEmpty(client.getPassword()))
             {
                 clientEntity.setPassword(existingClientEntity.getPassword());
             }
@@ -134,9 +150,9 @@ public class ClientServiceImpl implements ClientService
             return String.format("No User present with email or phone number as %s", client.getClientEmail());
         }
         mailService.sendForgotPasswordMail(
-                String.format(FORGOT_MAIL_CONTENT_STRING, clientEntity.getClientName(), clientEntity.getPassword()), 
+                String.format(FORGOT_MAIL_CONTENT_STRING, clientEntity.getClientName(), clientEntity.getPassword()),
                 clientEntity.getClientEmail());
-        
+
         return String.format("Please check your mail at: %s", clientEntity.getClientEmail());
     }
 }

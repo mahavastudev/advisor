@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @CrossOrigin(origins = {
         "http://localhost:4200", "http://horo3.mahavastu.com:8080"
@@ -65,6 +68,16 @@ public class SiteController
     public List<Site> getFilteredSites(@RequestBody SearchElement searchElement)
     {
         return siteService.getFilteredSites(searchElement);
+    }
+    
+    @GetMapping("/owner-patri/{siteId}")
+    @ResponseBody
+    public void getSiteOwnerPatri(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @PathVariable("siteId") Integer siteId)
+    {
+        siteService.getSiteOwnerPatri(response, siteId);
     }
 
 }

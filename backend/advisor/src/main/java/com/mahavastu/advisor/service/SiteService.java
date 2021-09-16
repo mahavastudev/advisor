@@ -6,6 +6,8 @@ import com.mahavastu.advisor.model.SiteType;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface SiteService {
     Site addSite(Site site);
     Site getSiteBySiteId(Integer siteId);
@@ -14,4 +16,5 @@ public interface SiteService {
     Site updateSite(Site site);
     List<Site> getAllSites();
     List<Site> getFilteredSites(SearchElement searchElement);
+    void getSiteOwnerPatri(HttpServletResponse response, Integer siteId);
 }

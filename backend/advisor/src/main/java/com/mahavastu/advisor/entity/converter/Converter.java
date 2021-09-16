@@ -10,10 +10,12 @@ import com.mahavastu.advisor.entity.AddressEntity;
 import com.mahavastu.advisor.entity.AdvisorEntity;
 import com.mahavastu.advisor.entity.ClientEntity;
 import com.mahavastu.advisor.entity.ClientImageMasterEntity;
+import com.mahavastu.advisor.entity.CountryEntity;
 import com.mahavastu.advisor.entity.MasterConcernEntity;
 import com.mahavastu.advisor.entity.OccupationEntity;
 import com.mahavastu.advisor.entity.SiteEntity;
 import com.mahavastu.advisor.entity.SiteTypeEntity;
+import com.mahavastu.advisor.entity.StateEntity;
 import com.mahavastu.advisor.entity.UserQueryEntity;
 import com.mahavastu.advisor.entity.advice.AdviceEntity;
 import com.mahavastu.advisor.entity.advice.SiteQueryCompositeKey;
@@ -21,10 +23,12 @@ import com.mahavastu.advisor.model.Address;
 import com.mahavastu.advisor.model.Advice;
 import com.mahavastu.advisor.model.Advisor;
 import com.mahavastu.advisor.model.Client;
+import com.mahavastu.advisor.model.Country;
 import com.mahavastu.advisor.model.MasterConcern;
 import com.mahavastu.advisor.model.Occupation;
 import com.mahavastu.advisor.model.Site;
 import com.mahavastu.advisor.model.SiteType;
+import com.mahavastu.advisor.model.State;
 import com.mahavastu.advisor.model.UserQuery;
 
 public final class Converter
@@ -108,7 +112,9 @@ public final class Converter
                 new Occupation(clientEntity.getOccupation().getOccupationId(), clientEntity.getOccupation().getOccupationName()),
                 null,
                 clientEntity.getCreatedDate(),
-                getAddressFromAddressEntity(clientEntity.getAddressEntity()));
+                getAddressFromAddressEntity(clientEntity.getAddressEntity()),
+                getAddressFromAddressEntity(clientEntity.getPlaceOfBirth()),
+                clientEntity.getTimeStampOfBirth());
     }
 
     public static List<Site> getSitesFromSiteEntities(List<SiteEntity> siteEntities)
@@ -238,7 +244,12 @@ public final class Converter
         return userQueries;
     }
 
-    public static ClientEntity getClientEntityFromClient(Client client, OccupationEntity occupationEntity, AddressEntity addressEntity, ClientImageMasterEntity clientImageMasterEntity)
+    public static ClientEntity getClientEntityFromClient(
+            Client client,
+            OccupationEntity occupationEntity,
+            AddressEntity addressEntity,
+            ClientImageMasterEntity clientImageMasterEntity,
+            AddressEntity placeOfBirthEntity)
     {
         if (client == null)
         {
@@ -256,7 +267,9 @@ public final class Converter
                     occupationEntity,
                     client.getPassword(),
                     client.getCreatedDate(),
-                    addressEntity);
+                    addressEntity,
+                    placeOfBirthEntity,
+                    client.getTimeStampOfBirth());
         }
         return new ClientEntity(
                 client.getClientName(),
@@ -495,12 +508,69 @@ public final class Converter
                 address.getState(),
                 address.getCountry(),
                 address.getPinCode());
-        if(address.getAddressId() != null)
+        if (address.getAddressId() != null)
         {
             addressEntity.setAddressId(address.getAddressId());
         }
         return addressEntity;
-        
+
     }
 
+    public static List<Country> getCountriesFromCoutryEntities(List<CountryEntity> countryEntities)
+    {
+        List<Country> countries = new ArrayList<>();
+        if (CollectionUtils.isEmpty(countryEntities))
+        {
+            return countries;
+        }
+
+        countryEntities.stream().forEach(ce -> {
+            Country country = getCountryFromCountryEntity(ce);
+            if (country != null)
+            {
+                countries.add(country);
+            }
+        });
+        return countries;
+    }
+
+    private static Country getCountryFromCountryEntity(CountryEntity countryEntity)
+    {
+        if (countryEntity == null)
+        {
+            return null;
+        }
+        return new Country(
+                countryEntity.getCountryId(),
+                countryEntity.getCode(),
+                countryEntity.getName(),
+                countryEntity.getIsStateList());
+    }
+
+    public static List<State> getStateFromStateEntities(List<StateEntity> stateEntities)
+    {
+        List<State> states = new ArrayList<>();
+        if (CollectionUtils.isEmpty(stateEntities))
+        {
+            return states;
+        }
+        stateEntities.stream().forEach(stateEntity -> {
+            State state = getStateFromStateEntity(stateEntity);
+            if (state != null)
+            {
+                states.add(state);
+            }
+
+        });
+        return states;
+    }
+
+    private static State getStateFromStateEntity(StateEntity stateEntity)
+    {
+        if (stateEntity == null)
+        {
+            return null;
+        }
+        return new State(stateEntity.getStateId(), stateEntity.getCode(), stateEntity.getName(), stateEntity.getCounCode());
+    }
 }

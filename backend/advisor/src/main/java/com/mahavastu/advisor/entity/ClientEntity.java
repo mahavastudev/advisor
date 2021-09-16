@@ -1,10 +1,21 @@
 package com.mahavastu.advisor.entity;
 
-import lombok.*;
-
 import java.sql.Timestamp;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "mv_client")
@@ -49,6 +60,13 @@ public class ClientEntity
     @OneToOne
     @JoinColumn(name = "address_id")
     private AddressEntity addressEntity;
+    
+    @OneToOne
+    @JoinColumn(name = "place_of_birth_address_id")
+    private AddressEntity placeOfBirth;
+    
+    // yyyy-mm-dd,hh:mm:ss
+    private String timeStampOfBirth;
 
     public ClientEntity(
             String clientName,

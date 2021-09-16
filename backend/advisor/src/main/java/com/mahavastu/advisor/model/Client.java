@@ -25,4 +25,7 @@ public class Client
     private String password;
     private Timestamp createdDate;
     private Address address;
+    private Address placeOfBirth;
+    // yyyy-mm-dd,hh:mm:ss
+    private String timeStampOfBirth;
 }
