@@ -59,7 +59,7 @@ public class SiteServiceImpl implements SiteService
     @Autowired
     private AdvisorRepository advisorRepository;
 
-    private final static String PATRI_URL = "https://vedicastrology1.mahavastu.com/vedic.astrology/vedicAstro/vedicAstroByTemplate?productId=22&languageId=2&username=advisorPortal&password=somePassword"
+    private final static String PATRI_URL = "https://vedicastrology1.mahavastu.com/vedic.astrology/vedicAstro/vedicAstroByTemplate?productId=25&languageId=2&username=advisorPortal&password=somePassword"
             + "&name=%s&dob=%s&city=%s&state=%s&country=%s&latitude=&longitude=";
 
     @Override
